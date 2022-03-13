@@ -1,0 +1,79 @@
+<?xml version = "1.0" standalone="yes"?> 
+<!DOCTYPE DOCUMENT [ 
+<!ELEMENT DOCUMENT (CUSTOMER)*> 
+<!ELEMENT CUSTOMER (NAME,DATE,ORDERS)> 
+<!ELEMENT NAME (LAST_NAME,FIRST_NAME)> 
+<!ELEMENT LAST_NAME (#PCDATA)> 
+<!ELEMENT FIRST_NAME (#PCDATA)> 
+<!ELEMENT DATE (#PCDATA)> 
+<!ELEMENT ORDERS (ITEM)*> 
+<!ELEMENT ITEM (PRODUCT,NUMBER,PRICE)> 
+<!ELEMENT PRODUCT (#PCDATA)> 
+<!ELEMENT NUMBER (#PCDATA)> 
+<!ELEMENT PRICE (#PCDATA)> 
+<!ATTLIST CUSTOMER
+		idNum ID #REQUIRED>
+<!ATTLIST ORDERS
+		serialId ID #REQUIRED
+		paid (yes|no) "no">
+<!ENTITY TODAY "October 15, 2015"> 
+]> 
+<DOCUMENT> 
+	<CUSTOMER idNum="1"> 
+	     <NAME> 
+			<LAST_NAME>Smith</LAST_NAME> 
+			<FIRST_NAME>Sam</FIRST_NAME> 
+         </NAME> 
+         <DATE>&TODAY;</DATE> 
+	    <ORDERS serialId="111"> 
+	       <ITEM> 
+	          <PRODUCT>Tomatoes</PRODUCT> 
+	          <NUMBER>8</NUMBER> 
+	          <PRICE>$1.25</PRICE> 
+           </ITEM> 
+		<ITEM> 
+           <PRODUCT>Oranges</PRODUCT> 
+           <NUMBER>24</NUMBER> 
+           <PRICE>$4.98</PRICE> 
+      </ITEM> 
+   </ORDERS> 
+</CUSTOMER> 
+<CUSTOMER idNum ="2"> 
+   <NAME> 
+         <LAST_NAME>Jones</LAST_NAME> 
+         <FIRST_NAME>Polly</FIRST_NAME>    
+   </NAME> 
+   <DATE>&TODAY;</DATE> 
+    <ORDERS serialId="112"> 
+        <ITEM> 
+            <PRODUCT>Bread</PRODUCT> 
+            <NUMBER>12</NUMBER> 
+            <PRICE>$14.95</PRICE> 
+        </ITEM> 
+    </ORDERS> 
+</CUSTOMER> 
+<CUSTOMER idNum="3"> 
+      <NAME> 
+         <LAST_NAME>Weber</LAST_NAME> 
+         <FIRST_NAME>Bill</FIRST_NAME> 
+      </NAME> 
+      <DATE>&TODAY; </DATE> 
+      <ORDERS serialId="114"> 
+          <ITEM> 
+             <PRODUCT>Asparagus</PRODUCT> 
+             <NUMBER>12</NUMBER> 
+             <PRICE>$2.95</PRICE> 
+          </ITEM> 
+          <ITEM> 
+                <PRODUCT>Lettuce</PRODUCT> 
+                <NUMBER>6</NUMBER> 
+                <PRICE>$11.50</PRICE> 
+            </ITEM> 
+            <ITEM> 
+                   <PRODUCT>Apples</PRODUCT> 
+                   <NUMBER>6</NUMBER> 
+                   <PRICE>$1.50</PRICE> 
+            </ITEM> 
+        </ORDERS> 
+     </CUSTOMER> 
+</DOCUMENT> 

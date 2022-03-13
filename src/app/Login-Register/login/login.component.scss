@@ -1,0 +1,38 @@
+@import "../../scss/form";
+
+:host {
+  width: 100%;
+  margin: 0;
+}
+
+h2 {
+  margin-top: 4rem;
+
+  @media(max-width: $tablet) {
+    margin-top: 0;
+  }
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  margin-bottom: 4rem;
+}
+
+
+// img {
+
+//   width: 50px;
+// }
+
+
+p {
+  padding-top: 2rem;
+  border-top: 1px solid var(--primary-text-color);
+  text-align: center;
+  font-size: .8em;
+}

@@ -1,0 +1,34 @@
+
+
+<div class="main-wrapper">
+
+  <div class="viewport" *ngIf="users2Show?.length > 0; else noUsers">
+
+    <div class="card" *ngFor="let user of users2Show">
+      <div class="card__sidebar">
+        <img mat-card-avatar class="card__header-image" [src]="user.avatar" onerror="this.src='/assets/images/man.svg'">
+
+      </div>
+      <div class="card__main">
+        <h2 class="card__main-name" id="name">{{user.lastName}}
+          {{user.firstName}}</h2>
+
+        <p class="card__content">
+          {{user._id}}
+        </p>
+
+        <div class="card__actions">
+          <button mat-button class="button" [routerLink]="['/message',user._id]">
+            <mat-icon>mail</mat-icon>
+            Message
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noUsers>
+    <p class="no-users">No followers are found</p>
+  </ng-template>
+
+</div>

@@ -1,0 +1,149 @@
+<h2>Posts</h2>
+
+<mat-expansion-panel #myPanel *ngFor="let post of (posts|async); trackBy: trackByIndex">
+
+  <!-- header ------------ -->
+  <mat-expansion-panel-header class="post-header">
+    <mat-panel-title class="card">
+
+      <div class="card__sidebar">
+        <img mat-card-avatar class="card__header-image" src="/assets/images/man.svg">
+        <!-- <i class="material-icons card__header-image">
+          person_outline
+        </i> -->
+      </div>
+
+      <div class="card__main">
+        <h2 class="card__main-name" id="name">{{post.userName}}
+        </h2>
+        <p class="card__content">
+          {{post.created | date:'short'}}
+        </p>
+      </div>
+    </mat-panel-title>
+
+    <mat-panel-description class="text">
+      {{firstWords(post.postContent)}} ...
+    </mat-panel-description>
+
+  </mat-expansion-panel-header>
+
+  <!-- post ----------------------- -->
+
+  <div class="post-content">
+    <p class="post-content__text text">
+      {{post.postContent}}
+    </p>
+    <ng-container *ngIf="post.user===creator">
+      <div class="post-content__link text" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </div>
+    </ng-container>
+  </div>
+
+
+  <!-- # of likes, # of comments, like/unlike ----------- -->
+
+  <div class="post-buttons">
+    <div class="btn likes">
+      <i class="icon material-icons-outlined">thumb_up_alt</i>
+      <span class="text">
+        {{post.totalLikes}}
+      </span>
+      <span class="text explain">
+        likes
+      </span>
+    </div>
+
+    <div class="btn comments">
+      <i class="icon material-icons-outlined">
+        mode_comment
+      </i>
+      <span class="text">
+        {{post.comments.length}}
+      </span>
+      <span class="text explain">
+        comments
+      </span>
+    </div>
+<!-- clicking the heart doesn't replace icon -->
+    <button class="btn like-it" mat-button (click)="likePost(post)">
+      <mat-icon class="icon">
+
+        {{checkInLikesArray(post.likes)==='like' ?  'favorite_border' : 'favorite'}}
+      </mat-icon>
+      <span class="text">
+        {{checkInLikesArray(post.likes)}}
+      </span>
+    </button>
+  </div>
+
+
+  <!-- posting a comment ----------------------- -->
+  <div class="post-comment">
+    <mat-form-field>
+      <textarea class="text" [(ngModel)]="comment" matInput placeholder="Leave a comment" cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="15"></textarea>
+    </mat-form-field>
+
+    <button mat-button (click)="postComment(post.id)" [disabled]="comment.length===0">
+      <mat-icon>comment</mat-icon>
+      <span class="text">Comment</span>
+    </button>
+  </div>
+
+  <!-- old comments --------------------------- -->
+
+  <mat-accordion *ngIf="post.comments?.length!==0">
+    <mat-expansion-panel open (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                         class="post-old-comments">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="text">
+            More comments ...
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-divider></mat-divider>
+      <div *ngFor="let comment of post.comments">
+        <p class="text">{{comment.userName}}:
+          {{comment.createdAt | date:'short' }}</p>
+        <p class="text">{{comment.comment}}</p>
+        <mat-divider></mat-divider>
+      </div>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>create</mat-icon>
+      <span>Edit</span>
+    </button>
+    <button mat-menu-item (click)="deletePost(post.id)">
+      <mat-icon>delete_sweep</mat-icon>
+      <span>Delete</span>
+    </button>
+  </mat-menu>
+
+</mat-expansion-panel>
+
+
+
+
+
+
+
+<!-- -------------------------- -->
+<!-- edit/delete menu -->
+
+<!--<mat-menu #menu="matMenu">
+  <button mat-menu-item>
+    <mat-icon>create</mat-icon>
+    <span>Edit</span>
+  </button>
+  <button mat-menu-item (click)="deletePost(post.id)">
+    <mat-icon>delete_sweep</mat-icon>
+    <span>Delete</span>
+  </button>
+</mat-menu>-->

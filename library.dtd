@@ -1,0 +1,10 @@
+﻿<!ELEMENT library (book*)>
+<!ELEMENT book (title, author, genre, chapter*)>
+  <!ATTLIST book isbn ID #REQUIRED>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT genre (#PCDATA)>
+<!ELEMENT chapter (chaptitle,text)>
+  <!ATTLIST chapter position #REQUIRED>
+<!ELEMENT chaptitle (#PCDATA)>
+<!ELEMENT text (#PCDATA)>

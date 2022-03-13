@@ -1,0 +1,34 @@
+<div class="message" [ngClass]="{isOwnMessageContainer: id===userID}">
+  <div class="card">
+
+    <div class="card__main">
+      <h2 class="card__main-name" id="name" [ngClass]="{isOwnSender:id!=userID}">{{senderName}}</h2>
+
+      <p class="card__content" [ngClass]="{isOwnTimestamp:id!=userID}">
+        {{timeStamp | date:'short'}}
+      </p>
+    </div>
+
+  </div>
+  <div class="messageContent" [ngClass]="{isOwnMessageContent:id!=userID}">
+    <div class="content">
+      {{messageContent}}
+    </div>
+  </div>
+</div>
+
+<!--
+<div class="messageContainer" [ngClass]="{isOwnMessageContainer:id!=userID}">
+  <div class="messageData">
+    <span class="sender" [ngClass]="{isOwnSender:id!=userID}">
+      {{senderName}}
+    </span>
+    <span class="timestamp" [ngClass]="{isOwnTimestamp:id!=userID}">
+      {{timeStamp | date:'medium'}}
+    </span>
+  </div>
+
+  <div class="messageContent" [ngClass]="{isOwnMessageContent:id!=userID}">
+    {{messageContent}}
+  </div>
+</div> -->

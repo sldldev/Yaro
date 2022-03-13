@@ -1,0 +1,25 @@
+<div class="main-wrapper">
+  <div class="viewport">
+    <h2>Upload Profile Image</h2>
+    <img [src]="previewUrl" class="img-preview"/>
+    <div>
+
+      <div [hidden]="!photoLoad">
+        <image-cropper class="img-container" [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+                       [aspectRatio]="1 / 1" [resizeToWidth]="128" format="png" (imageCropped)="imageCropped($event)"
+                       (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady()"
+                       (loadImageFailed)="loadImageFailed()"
+                       [roundCropper]="true"></image-cropper>
+
+
+        <img [hidden]="!photoLoad" [src]="croppedImage" class="img-preview"/>
+      </div>
+
+      <button mat-raised-button class="button" (click)="filePicker.click()">Select Photo</button>
+      <input type="file" #filePicker (change)="fileChangeEvent($event)" hidden>
+      <button mat-raised-button *ngIf="photoLoad" class="button" (click)="uploadImage()">Upload</button>
+      <button mat-raised-button *ngIf="photoLoad" class="button" (click)="reset()">Cancel</button>
+    </div>
+  </div>
+</div>
+<mat-spinner *ngIf="spinner"></mat-spinner>

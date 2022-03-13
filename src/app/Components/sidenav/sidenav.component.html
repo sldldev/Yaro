@@ -1,0 +1,88 @@
+<mat-nav-list>
+  <mat-card>
+    <mat-card-header>
+      <img mat-card-avatar class="avatar" [src]="avatar">
+
+      <mat-card-title>{{userName}}</mat-card-title>
+    </mat-card-header>
+    <!-- <mat-card-subtitle>another somene</mat-card-subtitle> -->
+  </mat-card>
+  <br>
+  
+  <a *ngIf="!authListenerSubs" routerLink="/" (click)="onClose()">
+    <mat-icon>account_circle</mat-icon>
+    Login
+    <mat-list-item></mat-list-item>
+
+  </a>
+  <a *ngIf="!authListenerSubs" routerLink="/signUp" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>how_to_reg</mat-icon>
+      SignUp
+    </mat-list-item>
+
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/post" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>announcement</mat-icon>
+      Posts
+    </mat-list-item>
+
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/videochat" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>videocam</mat-icon>
+      Video Chat
+    </mat-list-item>
+
+  </a>
+  <a *ngIf="authListenerSubs" [routerLink]="['/message','main']" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>question_answer</mat-icon>
+      Messages
+    </mat-list-item>
+
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/users" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>people</mat-icon>
+      Friends
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/following" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>people</mat-icon>
+      Following
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/followers" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>people_outline</mat-icon>
+      Followers
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/notifications" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>alarm</mat-icon>
+      Notifications
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/albums" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>art_track</mat-icon>
+      My Albums
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/create" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>add_photo_alternate</mat-icon>
+      Add Album
+    </mat-list-item>
+  </a>
+  <a *ngIf="authListenerSubs" routerLink="/settings" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>settings_applications</mat-icon>
+      Settings
+    </mat-list-item>
+  </a>
+</mat-nav-list>

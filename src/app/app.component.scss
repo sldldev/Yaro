@@ -1,0 +1,110 @@
+
+
+@import "scss/base";
+
+:host {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  height: $main-header-height;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+footer {
+  padding: 1rem;
+}
+
+main {
+  position: relative;
+  display: flex;
+  flex-grow: 1;
+  margin-top: $main-header-height;
+
+
+  .mat-sidenav-container {
+    // border: 3px solid blue;
+    width: 100%;
+    background-color: transparent;
+    position: relative;
+
+
+    // side bar
+    mat-sidenav {
+      position: fixed;
+      top: $main-header-height;
+      min-width: 250px;
+      background: var(--sidenav-bg-color);
+      box-shadow: 4px 0px 20px var(--box-shadow-color);
+      padding: 3em 1.5em;
+
+    }
+
+    // overlay
+    ::ng-deep .mat-drawer-backdrop {
+      // background-color: var(--sidenav-text-color);
+      background-color: transparent;
+      opacity: .8;
+    }
+
+    // sidenav content area
+    mat-sidenav-content {
+      // border: 3px solid blue;
+      height: auto;
+      overflow-x: hidden;
+    }
+  }
+
+}
+
+
+// /*mat-sidenav-container, mat-sidenav-content, mat-sidenav {
+//   height: 100%;
+// }*/
+
+// mat-sidenav {
+//   width: 250px;
+// }
+
+// a {
+//   text-decoration: none;
+//   color: white;
+// }
+
+// a:hover {
+//   color: lightgrey;
+// }
+
+
+// .fixed {
+//   position: fixed;
+// }
+
+// /*
+// .component-page-header[_ngcontent-c15] {
+//   display: flex;
+//   align-items: center;
+// }
+// */
+
+// /*.docs-primary-header {
+//   background: #3f51b5;
+// }
+
+// .docs-primary-header {
+//   padding-left: 20px;
+// }*/
+
+// mat-sidenav-content {
+//   /*height: 100vh;*/
+//   background-size: cover;
+//   background-position: top;
+//   padding:30px ;
+//   /*clip-path: polygon(0 0,100% 0,100% 50%);*/
+// }

@@ -1,0 +1,28 @@
+<div class="main-wrapper">
+  <mat-card>
+
+    <!--when we hear submit event - we trigger onSaveAlbum method and pass the form by reference (ngForm Label)-->
+    <form (submit)="onSaveAlbum(albumForm)" #albumForm="ngForm">
+      <!--#album form is label we give with NgForm to the data of the form-->
+      <mat-card-title><mat-icon id="library-icon">photo_library</mat-icon>Add Album</mat-card-title>
+      <mat-form-field hintLabel="at least 3 characters, no more then 40">
+        <!-- needs case specific error message if album title is more than 40 characters or invalid REGEX -->
+        <input matInput type="text" name="album" [ngModel]="albumEdit?.AlbumName" required pattern="^\s*[\w ]{3,40}$"
+               placeholder="Album Title" #album="ngModel">
+        <mat-error *ngIf="album.invalid">Please enter Album title</mat-error>
+
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput name="info" placeholder="Album Info" [ngModel]="albumEdit?.Info"
+                  cdkTextareaAutosize
+                  #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1"
+                  cdkAutosizeMaxRows="15"></textarea>
+      </mat-form-field>
+      <button [disabled]="albumForm.invalid" mat-raised-button type="submit">Save Album
+      </button>
+      <mat-card-footer>{{albumInformation}}</mat-card-footer>
+    </form>
+  </mat-card>
+
+</div>

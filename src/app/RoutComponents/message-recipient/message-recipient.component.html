@@ -1,0 +1,23 @@
+<!--
+<mat-list>
+  <h3 mat-subheader>People</h3>
+  <mat-list-item *ngFor="let user of recipients | async" [routerLink]="['/message',user._id]">
+    <mat-icon mat-list-icon>contacts</mat-icon>
+    <h4 mat-line>{{user.firstName}}</h4>
+    <p mat-line> {{user.lastName}} </p>
+  </mat-list-item>
+</mat-list> -->
+
+<div class="card" *ngFor="let user of recipients | async" [routerLink]="['/message',user._id]">
+  <div class="card__sidebar">
+    <img mat-card-avatar class="card__header-image" [src]="user.avatar" onerror="this.src='/assets/images/man.svg'">
+
+  </div>
+  <div class="card__main">
+    <h2 class="card__main-name" id="name">{{user.lastName}} {{user.firstName}}
+    </h2>
+    <!-- <p class="card__content">
+      {{user.firstName}}
+    </p> -->
+  </div>
+</div>

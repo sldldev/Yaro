@@ -1,0 +1,103 @@
+<mat-toolbar>
+
+  <div class="toolbar__left">
+    <button mat-button *ngIf="userIsAuthenticated" (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <img class="logo" src="/assets/images/logoWhite.svg">
+
+  </div>
+  <!--  MAYBE SHOW USERNAME NEXT TO LOGO. ("HELLO {{userName}}") -->
+
+  <div class="toolbar__right">
+
+    <!-- albums -->
+    <a mat-button *ngIf="userIsAuthenticated" class="text-link" routerLink="/albums" routerLinkActive="active"
+       (click)="onCloseSideNav()">
+      My Albums
+    </a>
+
+    <a mat-button *ngIf="userIsAuthenticated" class="text-link" routerLink="/create" routerLinkActive="active"
+       (click)="onCloseSideNav()">
+      Add Album
+    </a>
+
+    <!-- registration -->
+    <a *ngIf="!userIsAuthenticated" mat-button routerLink="/register/login" routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact:true}">Login</a>
+
+    <a *ngIf="!userIsAuthenticated" mat-button routerLink="/register/signUp" routerLinkActive="active"
+       [routerLinkActiveOptions]="{exact:true}">SignUp</a>
+
+
+    <!-- icons  -->
+    <a *ngIf="userIsAuthenticated" mat-button (click)="onLogout()" matTooltip="logout" matTooltipPosition="below">
+      <mat-icon>exit_to_app</mat-icon>
+    </a>
+
+    <!-- add menu with people that sent new messages -->
+    <a *ngIf="userIsAuthenticated" mat-button matTooltip="messages" matTooltipPosition="below"
+       [routerLink]="['/message','main']" (click)="onCloseSideNav();">
+      <mat-icon [matBadge]=" (unreadMessages|async) || null">message
+      </mat-icon>
+    </a>
+
+    <a *ngIf="userIsAuthenticated" mat-button matTooltip="notifications" matTooltipPosition="below"
+       [matMenuTriggerFor]="menu" [ngClass]="{ 'disabled' :(unreadNotifications|async)==0 }">
+      <mat-icon [matBadge]="(unreadNotifications|async) || null">notifications
+      </mat-icon>
+
+      <mat-menu #menu="matMenu">
+        <ng-container *ngIf="(unreadNotifications|async)!=0">
+          <div *ngFor="let notification of (notifications|async)">
+
+            <!-- put only unread notifications here -->
+            <div class="card">
+              <div class="card__main">
+                <h2 class="card__main-name" id="name">{{notification.createdAt | date:'short'}}
+                </h2>
+                <p class="card__content">
+                  {{notification.message}}
+                </p>
+              </div>
+
+            </div>
+            <!-- <mat-card class="example-card" *ngIf="notification.read!=true">
+              <mat-card-content>
+                <p>
+                  {{notification.message}}
+                </p>
+                <p>
+                  {{notification.createdAt | date:'short'}}
+                </p>
+              </mat-card-content>
+              <mat-card-actions>
+              </mat-card-actions>
+
+            </mat-card> -->
+
+          </div>
+          <a mat-button (click)="markAllAsRead()">
+            MARK ALL AS READ
+          </a>
+        </ng-container>
+      </mat-menu>
+    </a>
+
+
+    <a mat-button (click)="changeTheme()" matTooltip="toggle theme" matTooltipPosition="below">
+      <!-- <mat-icon class="material-icons">
+        settings_applications
+      </mat-icon> -->
+      <!-- <mat-icon class="material-icons">
+        invert_colors_off
+      </mat-icon> -->
+      <mat-icon>
+        format_color_fill
+      </mat-icon>
+    </a>
+  </div>
+
+
+</mat-toolbar>

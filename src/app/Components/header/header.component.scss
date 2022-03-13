@@ -1,0 +1,179 @@
+@import "../../scss/base";
+@import "../../scss/card";
+
+:host {
+  // border: 2px solid red;
+  width: 100%;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+
+}
+
+
+///////////////////////////////////////////////////////////
+// navigation bar
+///////////////////////////////////////////////////////////
+
+mat-toolbar {
+  background-color: var(--nav-bg-color);
+  padding: 0;
+  width: 100%;
+
+  color: var(--nav-text-color);
+
+  .toolbar__left {
+    @extend %hv-center;
+    margin-left: 2rem;
+    // border: 1px solid red;
+  }
+
+  .toolbar__right {
+    @extend %hv-center;
+
+    margin-left: auto;
+    margin-right: 2rem;
+    // border: 1px solid red;
+
+  }
+
+  .mat-icon {
+    color: var(--nav-text-color);
+
+    &:hover {
+      color: var(--nav-active-color);
+      transition: .3s;
+      opacity: 1;
+    }
+
+    .mat-badge-content {
+      background-color: var(--nav-text-color);
+    }
+
+  }
+
+  .mat-button {
+    font-family: $header-font-family;
+    font-size: 1.6rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    color: var(--nav-text-color);
+    border: 1px solid transparent;
+    transition: .3s;
+
+
+    @media (max-width: $tablet) {
+      font-size: 2rem;
+      min-width: 50px;
+
+      &.text-link {
+        display: none;
+      }
+
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    &:hover {
+      color: var(--nav-active-color);
+      opacity: 1;
+    }
+//  Change link color on focus
+    &:focus {
+      color: var(--nav-active-color);
+      opacity: 1;
+    }
+
+    &.active {
+      color: var(--nav-active-color);
+      border-bottom: 1px solid var(--nav-active-color);
+      border-radius: 0;
+
+      &:hover {
+        color: var(--nav-text-color);
+        border-bottom-color: var(--nav-text-color);
+      }
+    }
+  }
+}
+
+
+///////////////////////////////////////////////////////////
+//LOGO
+///////////////////////////////////////////////////////////
+
+.logo {
+  width: 80px;
+  margin-left: 2rem;
+  margin-top: -5px;
+
+
+  @media (max-width: $tablet) {
+    width: 65px;
+    margin-left: 0;
+    margin-right: 4rem;
+  }
+
+  cursor: pointer;
+  transition: .3s;
+
+  &:hover {
+    opacity: .7;
+  }
+}
+
+
+///////////////////////////////////////////////////////////
+// Notifications
+///////////////////////////////////////////////////////////
+
+
+::ng-deep .mat-menu-panel {
+  .mat-menu-content:not(:empty) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .mat-button {
+    font-family: $primary-font-family;
+    width: 100%;
+
+    align-self: center;
+    background: var(--box-bg-color);
+    color: var(--box-primary-text-color);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    word-spacing: 3px;
+    letter-spacing: 1px;
+    font-size: .8em;
+  }
+
+
+
+  .card {
+    background-color: #fff;
+    box-shadow: none;
+    border-bottom: 1px solid var(--box-bg-color);
+    border-radius: 0;
+    grid-template-columns: auto;
+
+    .card__main {
+
+      .card__main-name {
+        color: var(--primary-color);
+        font-size: .8em;
+      }
+
+      .card__content {
+        font-size: .8em;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+}

@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE library SYSTEM "library.dtd">
+<library>
+  <book isbn="isbn1234">
+    <title>A Book</title>
+    <author>An Author</author>
+    <genre>Horror</genre>
+    <chapter position="first">
+      <chaptitle>chapter one</chaptitle>
+      <text><![CDATA[Lorem Ipsum...]]></text>
+    </chapter>
+  </book>
+  <book isbn="isbn1235">
+    <title>Another Book</title>
+    <author>Another Author</author>
+    <genre>Science Fiction</genre>
+    <chapter position="first">
+      <chaptitle>chapter one</chaptitle>
+      <text><![CDATA[<i>Sit Dolor Amet...</i>]]></text>
+    </chapter>
+  </book>
+    <book isbn="isbn1237">
+    <title>A Book Number 2</title>
+    <author>An Author</author>
+    <genre>Drama</genre>
+    <chapter position="first">
+      <chaptitle>chapter one</chaptitle>
+      <text><![CDATA[Lorem Ipsum...]]></text>
+    </chapter>
+	<chapter position="second">
+      <chaptitle>chapter second</chaptitle>
+      <text><![CDATA[Lorem Ipsum...]]></text>
+    </chapter>
+  </book>
+</library>

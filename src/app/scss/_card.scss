@@ -1,0 +1,89 @@
+@import "base";
+
+// a single card
+.card {
+  background-color: var(--box-bg-color);
+  box-shadow: $box-shadow;
+  border-radius: 4px;
+
+  display: grid;
+  grid-template-columns: 10rem auto;
+}
+
+.card__sidebar {
+  // grid-column: 1;
+  padding: 2rem 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .card__header-image {
+    background: $light-lavender;
+    padding: .7rem;
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+.card__main {
+  // grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1rem;
+
+  .card__main-name {
+    color: var(--box-primary-text-color);
+    line-height: .9;
+    font-size: 1em;
+    font-weight: 500;
+    margin: 0;
+
+    &::after {
+      content: '';
+      display: block;
+      height: 0px;
+      width: 3em;
+      margin: .7em auto .5em;
+      margin-left: 0;
+      border-bottom: 1px solid  var(--box-secondary-text-color);
+
+    }
+  }
+
+}
+
+.card__content {
+  font-family: $primary-font-family;
+  color: var(--box-primary-text-color);
+  // color: var(--primary-color);
+  font-size: .8em;
+  margin: 0;
+
+  hyphens: auto;
+}
+
+.card__actions {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  justify-self: stretch;
+  background: var(--box-primary-text-color);
+  color: var(--box-bg-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: .3em;
+
+  button {
+    font-family: $primary-font-family;
+    color: var(--primary-color);
+    background: transparent;
+    padding: 0 1em;
+    margin: 0;
+    letter-spacing: 1px;
+    font-size: .8em;
+  }
+
+}

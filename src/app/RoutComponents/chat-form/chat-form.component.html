@@ -1,0 +1,44 @@
+
+<div class="main-wrapper">
+
+  <h2>Chats</h2>
+  <div class="chatWrapper">
+    <app-message-recipient class="people"></app-message-recipient>
+
+    <div #scroller  class="chat">
+      <div class="chatForm">
+        <mat-form-field>
+          <textarea matInput placeholder="Enter your message here" [(ngModel)]="message" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+
+          <i class="material-icons" matTooltip="send" matTooltipPosition="left"
+             (click)="sendMessage()">
+            keyboard_arrow_right
+          </i>
+        </mat-form-field>
+
+
+        <!-- <button  class="button" (click)="sendMessage()">Send</button> -->
+
+
+      </div>
+
+      <div class="feedWrapper">
+        <app-message-feed></app-message-feed>
+      </div>
+
+    </div>
+
+
+    <!-- <form class="chatFormWrapper ">
+
+  <mat-form-field class="example-full-width">
+    <input [(ngModel)]="message" [ngModelOptions]="{standalone: true}" matInput placeholder="Write Message">
+  </mat-form-field>
+
+
+  <button mat-raised-button color="primary" (click)="sendMessage()">Send</button>
+</form> -->
+
+  </div>
+</div>

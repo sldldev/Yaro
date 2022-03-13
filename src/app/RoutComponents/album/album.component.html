@@ -1,0 +1,125 @@
+<div class="main-wrapper" *ngIf="!isLoading">
+
+  <h2>{{albumInfo.AlbumName }}</h2>
+  <p>{{albumInfo.Info}}</p>
+  <mat-tab-group [selectedIndex]="selectedIndex" #tabGroup>
+    <mat-icon>art_track</mat-icon>
+    <mat-tab label="Gallery">
+      <ng-template mat-tab-label>
+        <mat-icon>art_track</mat-icon>
+        <span>Gallery</span>
+      </ng-template>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="startDate" placeholder="Choose start date" [(ngModel)]="startDateSelected">
+        <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+        <mat-datepicker #startDate></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="endDate" placeholder="Choose end date" [(ngModel)]="endDateSelected">
+        <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+        <mat-datepicker #endDate></mat-datepicker>
+      </mat-form-field>
+      <button mat-button class="button select" (click)="printDates()">Filter Dates</button>
+      <button *ngIf="filtered" mat-button class="button select" (click)="resetDateFilter()">Reset</button>
+
+      <div [hidden]="!uploading">
+        <p>Uploading files...</p>
+        <mat-progress-bar mode="determinate" [value]="this.progress"></mat-progress-bar>
+        <br>
+      </div>
+
+      <ng-container *ngIf="(files | async) === null">
+        Loading files...
+      </ng-container>
+      <mat-spinner *ngIf="isLoadingSpinner"></mat-spinner>
+      <ng-container *ngIf="(files | async)  as files2Show">
+        <ng-container *ngIf="files2Show.length !== 0; else noFiles">
+
+          <div class="buttons">
+            <button mat-button class="button select" (click)="chooseAll()">{{selectStr}}</button>
+
+            <button mat-button [matMenuTriggerFor]="menu2" [disabled]="deleteData.length==0" class="button select">
+              Options
+            </button>
+            <mat-menu #menu2="matMenu">
+              <button mat-menu-item [disabled]="deleteData.length==0"
+                      (click)="deleteSelected()">
+                Delete Selected
+              </button>
+              <button mat-menu-item [disabled]="deleteData.length==0"
+                      (click)="wipePhotoFromAll()">
+                Delete From All
+              </button>
+              <button mat-menu-item [disabled]="deleteData.length==0" (click)="shareSelected()">
+                Share Selected
+              </button>
+              <button mat-menu-item [matMenuTriggerFor]="moveTo">Move To</button>
+            </mat-menu>
+            <mat-menu #moveTo="matMenu">
+              <button mat-menu-item (click)="moveSelectedToNewAlbum()">New Album</button>
+              <button mat-menu-item (click)="moveSelectedToExistingAlbum()">Existing Album</button>
+            </mat-menu>
+
+          </div>
+          <mat-form-field>
+            <input matInput type="text" id="inputEmail" [(ngModel)]="filterStr" placeholder="Enter search"
+                   [(ngModel)]="file_name" [ngModelOptions]="{standalone: true}">
+          </mat-form-field>
+
+          <button mat-button class="sort" [matMenuTriggerFor]="menu">
+            <i class="material-icons" matTooltip="sort by" matTooltipPosition="left">
+              keyboard_arrow_down
+            </i>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item>Description</button>
+            <button mat-menu-item>Camera</button>
+            <button mat-menu-item>etc..</button>
+          </mat-menu>
+
+          <cdk-virtual-scroll-viewport class="gallery" [itemSize]="30">
+            <!-- additional container is required for shadow, since nothing can be seen outside of virtual scroller -->
+            <div class="gallery-content">
+              <div *cdkVirtualFor="let file of files2Show">
+
+                <div class="image">
+                  <app-secure-image class="image-view" [src]="this.sanitizer.bypassSecurityTrustResourceUrl(file.url)"
+                                    (click)="openImageDialog(file.url)"></app-secure-image>
+                  <mat-checkbox (change)="addRemoveFiles(file)" [ngModel]="selectAll"></mat-checkbox>
+                </div>
+
+              </div>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </ng-container>
+        <ng-template #noFiles>
+          <p class="no-files">No files are found</p>
+        </ng-template>
+      </ng-container>
+
+    </mat-tab>
+
+    <mat-tab label="Upload">
+
+      <ng-template mat-tab-label>
+        <mat-icon>add_to_photos</mat-icon>
+        <span>Upload</span>
+      </ng-template>
+
+
+      <div class="viewport">
+        <p>...</p>
+        <div>
+          <a type="button" mat-raised-button class="button" (click)="filePicker.click()">Add Photos</a>
+          <input type="file" #filePicker multiple (change)="onImagePicked($event)" [hidden]="true">
+          <br>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+

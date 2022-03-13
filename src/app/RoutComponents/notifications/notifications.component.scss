@@ -1,0 +1,39 @@
+@import "../../scss/base";
+@import "../../scss/card";
+
+//////////////////////////////////////////
+// card fixes
+
+
+.card {
+  background-color: #fff;
+  border-left: 1rem solid var(--box-bg-color);
+  margin-bottom: 1rem;
+  box-shadow: none;
+  grid-template-columns: auto 5rem;
+  padding: 1em;
+
+  &.read {
+    opacity: .5;
+  }
+
+  .card__main {
+    padding: 0;
+
+    .card__main-name {
+      color: var(--primary-color);
+      font-size: .8em;
+    }
+    .card__content {
+      color: var(--primary-color);
+      font-size: .8em;
+      margin-bottom: 0;
+    }
+  }
+
+
+  .simple-link {
+    justify-self: center;
+    align-self: end;
+  }
+}

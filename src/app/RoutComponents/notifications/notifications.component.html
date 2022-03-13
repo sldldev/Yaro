@@ -1,0 +1,52 @@
+
+<div class="main-wrapper">
+
+  <h2>Notifications</h2>
+
+  <div *ngFor="let notification of (notifications|async)">
+
+    <div class="card" [ngClass]="{'read': notification.read}">
+      <div class="card__main">
+        <h2 class="card__main-name" id="name">{{notification.createdAt | date:'short'}}
+        </h2>
+        <p class="card__content">
+          {{notification.message}}
+        </p>
+      </div>
+
+      <div class="simple-link" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </div>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngIf="notification.read!=true" (click)="markAsRead(notification.id)">
+          <mat-icon>done</mat-icon>
+          <span>Mark as Read</span>
+        </button>
+        <button mat-menu-item (click)="deleteNotification(notification.id)">
+          <mat-icon>delete_sweep</mat-icon>
+          <span>Delete</span>
+        </button>
+      </mat-menu>
+    </div>
+
+
+    <!-- <mat-card class="example-card">
+    <mat-card-content>
+      <p>
+        {{notification.message}}
+      </p>
+      <p>
+        {{notification.createdAt | date:'medium'}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button class="button" *ngIf="notification.read!=true"
+        (click)="markAsRead(notification.id)">MARK AS READ</button>
+      <button mat-raised-button class="button" (click)="deleteNotification(notification.id)">DELETE</button>
+    </mat-card-actions>
+  </mat-card> -->
+
+  </div>
+
+</div>

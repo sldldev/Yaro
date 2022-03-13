@@ -1,0 +1,132 @@
+@import "../../scss/search";
+
+
+
+.no-albums {
+  text-align: center;
+}
+
+
+
+.search-container {
+
+  .sort {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-text-color);
+  }
+}
+
+
+// albums list
+.viewport {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+
+  // content - all the cards
+  &>div {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+// a single card
+mat-card {
+  position: relative;
+  display: inline-block;
+  min-width: 230px;
+
+  margin: 1rem;
+  background-color: var(--box-bg-color);
+  background-color: var(--box-bg-color-alpha);
+
+
+  background-image: url(https://picsum.photos/300/200);
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: multiply;
+  box-shadow: 0 0 10px var(--box-bg-color-alpha) !important;
+
+  cursor: pointer;
+
+
+  mat-menu {}
+
+  // img {
+  //   // display: none;
+  //   position: absolute;
+  //   top: 0;
+  //   left: 0;
+  //   width: 100%;
+  //   height: 100%;
+  //   object-fit: cover;
+  //   z-index: -1;
+  //   border-radius: 4px;
+  //   // opacity: .4;
+  //   // filter: blur(3px);
+  // }
+
+  mat-card-header {
+    justify-content: flex-start;
+    margin-left: 0;
+    margin-bottom: 1em;
+
+
+    ::ng-deep .mat-card-header-text {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      font-family: $primary-font-family;
+
+      mat-card-title {
+        font-size: 1.2em;
+        font-weight: 700;
+        color: var(--box-primary-text-color);
+      }
+
+      mat-card-subtitle {
+        text-transform: lowercase;
+        letter-spacing: 1px;
+        font-size: .65em;
+        font-weight: 600;
+        margin-top: -4px;
+        color: var(--box-primary-text-color);
+      }
+    }
+  }
+
+  // open button
+  mat-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-family: $primary-font-family;
+
+    .button {
+      display: inline-block;
+
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      border-bottom: 1px solid var(--box-primary-text-color);
+      color: var(--box-primary-text-color);
+      text-decoration: none;
+
+      padding-bottom: 3px;
+      text-transform: uppercase;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .mat-icon {
+      cursor: pointer;
+      color: var(--box-primary-text-color);
+    }
+  }
+
+}

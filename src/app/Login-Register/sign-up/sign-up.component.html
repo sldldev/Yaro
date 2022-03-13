@@ -1,0 +1,38 @@
+<div *ngIf="!isLoading">
+  <!-- <img mat-card-avatar src="/assets/album.png"> -->
+
+  <form (submit)="onSign(signForm)" #signForm="ngForm">
+
+    <h2>SignUp</h2>
+    <mat-form-field hintLabel="letters only" [floatLabel]="'auto'">
+      <!-- <mat-label>Both a label and a placeholder</mat-label> -->
+      <input matInput name="firstName" ngModel #nameInput="ngModel" type="text" required placeholder="First Name"
+             pattern="^[a-zA-Z]+$">
+      <mat-error *ngIf="nameInput.invalid">Letters only</mat-error>
+    </mat-form-field>
+
+    <mat-form-field hintLabel="letters only" [floatLabel]="'auto'">
+      <input matInput name="lastName" ngModel #lastName="ngModel" type="text" required placeholder="Last Name"
+             pattern="^[a-zA-Z]+$">
+      <mat-error *ngIf="lastName.invalid">Letters only</mat-error>
+    </mat-form-field>
+
+    <mat-form-field hintLabel="ex.yarik@gmail.com" [floatLabel]="'auto'">
+      <input matInput name="email" ngModel #emailInput="ngModel" type="email" required email placeholder="E-Mail"
+             pattern="^[^\s@]+@[^\s@.]+\.[^\s@.]+$">
+      <mat-error *ngIf="emailInput.invalid">Please enter valid email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field hintLabel="at least 4 alpha-numeric characters" [floatLabel]="'auto'">
+      <input type="password" matInput ngModel #passwordInput="ngModel" name="password" placeholder="Password" required
+             pattern="^\w{4,}$">
+      <mat-error *ngIf="passwordInput.invalid">Please enter valid password</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button type="submit" [disabled]="signForm.invalid">
+      SignUp
+    </button>
+  </form>
+</div>
+
+<mat-spinner *ngIf="isLoading"></mat-spinner>

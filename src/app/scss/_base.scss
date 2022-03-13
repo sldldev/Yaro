@@ -1,0 +1,198 @@
+@import "macros";
+@import "colors";
+
+//////////////////////////////////////////////////////////////////////////////////
+// screens
+//////////////////////////////////////////////////////////////////////////////////
+// screen limitation
+// @media (min-width:320px)  { /* smartphones, iPhone, portrait 480x320 phones */ }
+// @media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
+// @media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
+// @media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
+// @media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
+// @media (min-width:1281px) { /* hi-res laptops and desktops */ }
+
+$desktop-xlarge: 1800px;
+$desktop-large: 1200px;
+$desktop: 960px;
+$tablet: 768px;
+$mobile-large: 600px;
+$mobile: 480px;
+$mobile-small: 360px;
+$box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2),
+0 2px 2px 0 rgba(0, 0, 0, .14),
+0 1px 5px 0 rgba(0, 0, 0, .12);
+$box-shadow-2: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12);
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// typography
+//////////////////////////////////////////////////////////////////////////////////
+
+// $primary-font-family: helvetica, sans-serif;
+// $primary-font-family: "Ubuntu", sans-serif;
+$primary-font-family: montserrat,
+helvetica,
+sans-serif;
+$header-font-family: montserrat,
+helvetica,
+sans-serif;
+
+//////////////////////////////////////////////////////////////////////////////////
+// layout
+//////////////////////////////////////////////////////////////////////////////////
+
+
+$main-header-height: 64px;
+$main-header-height-small: 56px;
+
+$main-wrapper-width: 80%;
+$main-wrapper-max-width: 1000px;
+$main-wrapper-margin-top: 10rem;
+$main-wrapper-margin-top-small: 6rem;
+
+.main-wrapper {
+  width: $main-wrapper-width;
+  max-width: $main-wrapper-max-width;
+  margin: $main-wrapper-margin-top auto;
+  // border: 2px solid red;
+
+  @media (max-width: $mobile-large) {
+    width: 88%;
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// headings
+//////////////////////////////////////////////////////////////////////////////////
+
+$h2-font-size: 2.5rem;
+
+header,
+h1,
+h2 {
+  font-family: $header-font-family;
+  color: var(--primary-text-color);
+}
+
+h2 {
+  font-size: $h2-font-size;
+  margin-bottom: 1em;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// paragraphs
+//////////////////////////////////////////////////////////////////////////////////
+
+p {
+  margin-bottom: 1em;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--primary-text-color);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// links
+//////////////////////////////////////////////////////////////////////////////////
+
+.simple-link,
+a,
+a:visited {
+  cursor: pointer;
+  color: var(--primary-text-color);
+  transition: .3s;
+
+  &:hover {
+    opacity: .5;
+  }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// tooltip from material
+//////////////////////////////////////////////////////////////////////////////////
+::ng-deep .mat-tooltip {
+  font-family: $primary-font-family;
+  font-size: 1.3rem;
+  background-color: var(--tooltip-bg-color);
+  color: var(--tooltip-color);
+  font-weight: normal;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+// spinner from material
+//////////////////////////////////////////////////////////////////////////////////
+
+mat-spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: var(--spinner-color);
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// material fixes
+//////////////////////////////////////////////////////////////////////////////////
+
+// scroll bar on auto resize
+textarea[cdktextareaautosize].mat-input-element {
+  overflow: hidden;
+}
+
+
+// disable ripple on button active
+.mat-button {
+  ::ng-deep .mat-button-ripple.mat-ripple {
+    display: none;
+  }
+}
+
+
+
+.mat-icon:focus {
+  outline: none;
+}
+
+
+// small material dialogs
+::ng-deep .mat-menu-panel {
+  background: $light-lavender;
+
+  .mat-menu-item {
+    font-family: $primary-font-family;
+    color: var(--primary-color);
+    background: $light-lavender;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    .mat-icon-no-color {
+      color: var(--primary-color);
+    }
+  }
+}
+
+
+.mat-tab-list {
+
+  margin-bottom: 2rem;
+  .mat-tab-label {
+    font-family: $primary-font-family;
+    color: var(--primary-text-color);
+    font-weight: 700;
+
+    .mat-tab-label-content {
+      span {
+        padding: .8rem;
+      }
+    }
+  }
+}

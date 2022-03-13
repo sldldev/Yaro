@@ -1,0 +1,73 @@
+@import "../../scss/form";
+
+
+mat-card {
+  width: 40%;
+  margin: auto;
+  max-width: 600px;
+  background-color: var(--bg-color);
+  mat-card-title {
+    font-family: $header-font-family;
+    font-weight: 700;
+    color: var(--primary-text-color);
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1em;
+
+  }
+  #library-icon {
+    margin-right: 0.3em;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    padding: 1em 2em;
+
+    mat-form-field:first-of-type {
+      margin-bottom: 3.5em;
+    }
+
+    button {
+      margin-bottom: 4rem;
+      &:disabled {
+        background-color: var(--button-bg-color);
+        opacity: .4;
+      }
+    }
+
+    // underline
+    ::ng-deep .mat-form-field-underline,
+    ::ng-deep .mat-form-field-underline.mat-focused,
+    ::ng-deep .mat-form-field-ripple {
+      background-color: var(--primary-text-color);
+    }
+
+
+    ::ng-deep .mat-hint {
+      color: var(--secondary-text-color);
+      font-weight: 600;
+    }
+
+    // filled text
+    ::ng-deep input.mat-input-element,
+    ::ng-deep textarea.mat-input-element {
+      color: var(--primary-text-color);
+      caret-color: var(--primary-text-color);
+      font-weight: 500;
+    }
+  }
+}
+
+// autofill color
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--box-primary-text-color);
+}

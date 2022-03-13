@@ -1,0 +1,27 @@
+<div mat-dialog-content>
+  <img [src]="showPreviw(this.dataImages[currentIndex].url)" width="750">
+</div>
+<ng-container *ngIf="exifPresent">
+  <div *ngFor="let item of exif">
+    {{item.name + ":" + item.value}}
+  </div>
+</ng-container>
+<div mat-dialog-actions>
+  <div id="map" class="map" [hidden]="!this.displayGpsLocation"></div>
+  <button mat-button (click)="previousPhoto()">PREVIOUS</button>
+  <button mat-button (click)="nextPhoto()">NEXT</button>
+  <button *ngIf="!exifPresent; else hideInfo" mat-button (click)="toggleExif()">INFO</button>
+  <ng-template #hideInfo>
+    <button mat-button (click)="toggleExif()">HIDE</button>
+  </ng-template>
+
+
+  <!--  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      &lt;!&ndash; This is the tree node template for leaf nodes &ndash;&gt;
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+        &lt;!&ndash; use a disabled button to provide padding for tree leaf &ndash;&gt;
+        <button mat-icon-button disabled></button>
+        {{node.name}}
+      </mat-tree-node>
+    </mat-tree>-->
+</div>

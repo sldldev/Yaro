@@ -1,0 +1,232 @@
+@import "../../scss/base";
+@import "../../scss/card";
+
+//////////////////////////////////////////
+// general typography
+
+.text,
+::ng-deep .mat-form-field-label {
+  font-family: $primary-font-family;
+  color: var(--primary-color);
+}
+
+mat-icon {
+  margin-right: 3px;
+}
+
+mat-icon,
+.icon {
+  color: var(--box-bg-color);
+}
+
+button:hover {
+  opacity: .7;
+  background-color: transparent;
+}
+
+mat-divider {
+  height: 15px;
+}
+
+//////////////////////////////////////////
+// comment container itself
+
+mat-expansion-panel {
+  border-left-color: var(--box-bg-color);
+  border-left-style: solid;
+  border-left-width: 1rem;
+  margin-bottom: 10px;
+  // border: 1px solid rgb(223, 221, 221);
+  // box-shadow: none;
+}
+
+mat-expansion-panel-header {
+  // background: var(--box-bg-color);
+  min-height: 80px;
+
+  @media (max-width: $tablet) {
+    min-height: 130px;
+  }
+
+  // header insides
+  ::ng-deep .mat-content {
+    display: flex;
+
+    // title and description
+    &>* {
+      width: 50%;
+    }
+
+    @media (max-width: $tablet) {
+      flex-wrap: wrap;
+
+      &>* {
+        width: 100%;
+      }
+    }
+
+    // left part - date image name
+    mat-panel-title.card {
+      background-color: transparent;
+      box-shadow: none;
+      padding: 0;
+
+      @media (max-width: $tablet) {
+        flex-direction: row;
+        padding: 0;
+
+        .card__sidebar {
+          margin-right: 2em;
+        }
+      }
+
+      .card__content {
+        margin-bottom: 0;
+      }
+
+      .card__content,
+      .card__main-name {
+        color: var(--primary-color);
+        font-size: 1em;
+      }
+
+      .card__main-name {
+        font-weight: 600;
+      }
+
+      // border: 3px solid red;
+      background-color: transparent;
+
+      .card__header-image {
+        @extend %hv-center;
+        border-radius: 50%;
+        font-size: 2em;
+
+
+        width: 50px !important;
+        height: 50px !important;
+        padding: 5px !important;
+        align-self: center;
+
+      }
+    }
+
+    // right part - post description
+    mat-panel-description {
+      // border: 3px solid blue;
+      display: flex;
+      align-items: center;
+
+      @media (max-width: $tablet) {
+        margin-top: 1em;
+      }
+
+      .text {
+        flex-grow: 1;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+
+//////////////////////////////////////////
+// like/comments icons
+
+.post-buttons {
+  @extend %hv-center;
+  justify-content: space-between;
+  margin: 1.3em auto 1.5em;
+
+  border-bottom: 1px solid var(--box-bg-color);
+  border-top: 1px solid var(--box-bg-color);
+
+  .btn {
+    padding-top: 1.3em;
+    padding-bottom: 1.3em;
+
+    @extend %hv-center;
+
+    .icon {
+      margin-right: 5px;
+    }
+
+    .text {
+      display: inline-block;
+      padding: 0 5px;
+
+      @media (max-width: $tablet) {
+        &.explain {
+          display: none;
+        }
+      }
+    }
+
+
+    .text:first-of-type {
+      min-width: 30px;
+    }
+
+    &.like-it {
+      padding: 0;
+      .text {
+        display: inline-block;
+        min-width: 55px;
+        padding: 0;
+        text-align: right;
+      }
+    }
+  }
+
+}
+
+
+//////////////////////////////////////////
+// post content
+.post-content {
+  display: flex;
+  margin: 1em auto;
+
+  .post-content__text {
+    margin: 0 2em 0 0;
+    flex-grow: 1;
+  }
+
+  .post-content__link {
+    cursor: pointer;
+
+    &:hover {
+      opacity: .7;
+    }
+  }
+}
+
+
+
+//////////////////////////////////////////
+// post comment
+.post-comment {
+  display: flex;
+
+  mat-form-field {
+    flex-grow: 1;
+  }
+
+
+  button {
+    margin-left: auto;
+
+    span {
+      color: var(--primary-color);
+      font-family: $primary-font-family;
+    }
+
+    @media (max-width: $tablet) {
+      span {
+        display: none;
+      }
+
+      padding-right: 0;
+    }
+  }
+}

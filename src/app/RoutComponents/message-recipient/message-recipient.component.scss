@@ -1,0 +1,53 @@
+@import "../../scss/base";
+@import "../../scss/card";
+
+//////////////////////////////////////////
+// card fixes
+
+h2 {
+  padding-left: 1em;
+}
+
+.card {
+  background-color: #fff;
+  box-shadow: none;
+  cursor: pointer;
+
+  @media (max-width: $tablet) {
+    grid-template-columns: auto;
+  }
+
+  &:focus {
+    outline: none;
+    background: #eee;
+  }
+
+  &:hover {
+    opacity: .5;
+    background: #f2f2f2;
+  }
+
+  .card__sidebar {
+    @media (max-width: $tablet) {
+      padding-bottom: 0;
+    }
+  }
+  .card__main {
+    justify-content: center;
+    align-items: center;
+
+    .card__main-name {
+      color: var(--primary-color);
+      font-size: .8em;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .card__content {
+      color: var(--primary-color);
+      font-size: .8em;
+    }
+  }
+}

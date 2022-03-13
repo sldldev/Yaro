@@ -1,0 +1,18 @@
+<div class="main-wrapper">
+
+  <form (submit)="submitPost(postForm)" #postForm="ngForm">
+    <!-- clear input after submitting -->
+    <mat-form-field>
+      <textarea matInput placeholder="Enter your post here" ngModel name="post" #post="ngModel" class="postText"
+                cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+
+    <div class="buttons">
+      <button mat-raised-button type="submit">Post</button>
+      <button mat-raised-button class="button">Attach File</button>
+    </div>
+  </form>
+
+  <app-posts-container></app-posts-container>
+
+</div>

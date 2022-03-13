@@ -1,0 +1,32 @@
+@import "../../scss/form";
+
+
+.mat-form-field {
+  width: 100%;
+  margin: 0;
+
+
+
+  ::ng-deep .mat-form-field-label {
+    color: var(--primary-text-color);
+  }
+
+  // filled text
+  ::ng-deep input.mat-input-element,
+  ::ng-deep textarea.mat-input-element {
+    color: var(--primary-text-color);
+  }
+
+}
+
+.buttons {
+  button {
+    margin: 0;
+    &:first-of-type {
+      margin-right: .5em;
+    }
+  }
+
+  margin-bottom: 3em;
+}
+

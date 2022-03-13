@@ -1,0 +1,26 @@
+@import "../../scss/base";
+
+
+:host{
+  // border: 2px solid red;
+  // width: $main-wrapper-width;
+  // max-width: $main-wrapper-max-width;
+  width: 85%;
+  margin: 0 auto;
+
+  // @include hv-center;
+  @extend %hv-center;
+
+  // width: 100%;
+}
+
+p {
+  width: 100%;
+  margin: 0;
+  padding: 2rem;
+  text-align: center;
+  border-top: 1px solid var(--primary-text-color);
+}
+
+
+

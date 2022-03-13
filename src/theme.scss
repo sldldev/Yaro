@@ -1,0 +1,11 @@
+//@import "~@angular/material/theming";
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "~@angular-mdc/theme/material";
+/*@include mat-core();
+
+$costum-primary: mat-palette($mat-blue-gray,500);
+$costum-accent: mat-palette($mat-orange,200);
+
+$custom-theme: mat-dark-theme($costum-primary, $costum-accent);
+
+@include angular-material-theme($custom-theme);*/

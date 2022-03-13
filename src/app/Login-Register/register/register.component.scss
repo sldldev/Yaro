@@ -1,0 +1,74 @@
+@import "../../scss/base";
+
+
+.reg-container {
+  width: 100%;
+
+
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-gap: 10%;
+
+  @media(max-width: $tablet) {
+    grid-template-columns: 1fr;
+    grid-gap: 6rem;
+  }
+
+  // border: 2px solid blue;
+
+  .about {
+    overflow: visible;
+
+    .logo {
+      overflow: visible;
+      position: relative;
+      margin-top: -150px;
+      width: 170px;
+      display: block;
+      margin: 0;
+      margin-bottom: 6rem;
+      margin-left: -15px;
+
+      svg {
+        overflow: visible;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        .cloud {
+          &.anim {
+            transform: translateY(-500px);
+            animation: move-cloud 2s 1s forwards;
+          }
+
+        }
+      }
+    }
+
+    @keyframes move-cloud {
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    border-right: 1px solid var(--primary-text-color);
+
+    @media(max-width: $tablet) {
+      border-right: none;
+    }
+
+    p {
+      width: 80%;
+    }
+  }
+
+  .registration {
+    // border: 2px solid blue;
+
+    display: flex;
+
+  }
+
+
+}
+

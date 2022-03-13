@@ -1,0 +1,29 @@
+@import "../../scss/form";
+
+.viewport {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar {
+  max-height: 300px;
+  max-width: 300px;
+  object-position: center;
+  object-fit: cover;
+}
+
+.img-container{
+  width:640px;
+  height: 480px;
+  float: left;
+}
+
+.img-preview{
+  width: 128px;
+  height: 128px;
+  float: left;
+  margin-left:10px ;
+  border-radius: 50%;
+}

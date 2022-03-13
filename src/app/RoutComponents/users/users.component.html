@@ -1,0 +1,81 @@
+<div class="search-container">
+  <div class="search">
+    <!-- <button mat-mini-fab>
+              <i class="material-icons">search</i>
+            </button> -->
+
+    <div class="icon">
+      <img src="/assets/images/search.svg" alt="search">
+    </div>
+
+    <!-- should filter by first or last name, doesn't need dropdown  -->
+    <!-- sticks to the top and overlaps with content -->
+    <mat-form-field>
+      <input matInput type="text" id="inputEmail" placeholder="Enter user name to search" [(ngModel)]="filterStr">
+    </mat-form-field>
+
+  </div>
+  <button mat-button class="sort" [matMenuTriggerFor]="menu">
+    <i class="material-icons" matTooltip="sort by" matTooltipPosition="left">
+      keyboard_arrow_down
+    </i>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="changeKey('first')">First Name</button>
+    <button mat-menu-item (click)="changeKey('last')">
+      Last Name
+    </button>
+  </mat-menu>
+
+</div>
+
+
+<!-- sort users by name -->
+
+<div class="main-wrapper">
+
+
+  <div class="viewport" *ngIf="users2Show?.length > 0; else noUsers">
+
+    <div class="card" *ngFor="let user of users2Show | peoplePipe:filterStr:filterKey ">
+      <div class="card__sidebar">
+        <img mat-card-avatar class="card__header-image" [src]="user.avatar" onerror="this.src='/assets/images/man.svg'">
+        <!-- social icons later
+        <ul class="card__social-list">
+          <li><a href="#" target="_blank"></a></li>
+          <li><a href="#" target="_blank"></a></li>
+          <li><a href="#" target="_blank"></a></li>
+        </ul> -->
+      </div>
+      <div class="card__main">
+        <h2 class="card__main-name" id="name">{{user.lastName}}
+          {{user.firstName}}</h2>
+
+        <p class="card__content">
+          {{user._id}}
+        </p>
+      </div>
+
+      <div class="card__actions">
+        <button mat-button class="button" *ngIf="!user.isFollowing" (click)="followUser(user)">
+          <mat-icon>person_add</mat-icon>
+          Follow
+        </button>
+        <button mat-button class="button" *ngIf="user.isFollowing" (click)="unfollow(user)">
+          <mat-icon>person_outline</mat-icon>
+          Unfollow
+        </button>
+        <button mat-button class="button" [routerLink]="['/message',user._id]">
+          <mat-icon>mail</mat-icon>
+          Message
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template #noUsers>
+    <p class="no-users">No users are found</p>
+  </ng-template>
+
+</div>

@@ -1,0 +1,25 @@
+
+@import "../../scss/form";
+
+:host {
+  width: 100%;
+  margin: 0;
+}
+
+h2 {
+  margin-top: 4rem;
+
+  @media(max-width: $tablet) {
+    margin-top: 0;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+
+}
+
+
+
+

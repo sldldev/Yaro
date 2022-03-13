@@ -1,0 +1,111 @@
+@import "base";
+
+
+
+/* Change Autocomplete styles in Chrome*/
+// autofill color
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 0px 1000px transparent inset;
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: var(--primary-text-color);
+  // border: 1px solid green;
+}
+
+
+// submit button
+.button,
+button[type=submit] {
+  margin-top: 3rem;
+  background-color: var(--button-bg-color);
+  color: var(--secondary-text-color);
+  transition: .3s;
+  font-size: 1.05em;
+
+  ::ng-deep .mat-button-wrapper {
+    font-family: $header-font-family;
+  }
+
+  &:hover {
+    // background-color: var(--button-hover-bg-color);
+    opacity: .6;
+  }
+
+  &:disabled {
+    background-color: var(--button-disabled-bg-color);
+    color: var(--secondary-text-color);
+    opacity: .5;
+  }
+}
+
+
+
+// input fields
+.mat-form-field {
+  background-color: transparent;
+  margin-bottom: 1em;
+
+
+  // tip above, explain below and the label
+  ::ng-deep .mat-input-element,
+  ::ng-deep .mat-form-field-infix,
+  ::ng-deep .mat-form-field-subscript-wrapper,
+  ::ng-deep .mat-form-field-label {
+    color: var(--primary-text-color);
+    font-family: $primary-font-family;
+    font-weight: 400;
+
+    // asterisk
+    span {
+      color: var(--primary-text-color);
+    }
+  }
+
+  // filled text
+  ::ng-deep input.mat-input-element,
+  ::ng-deep textarea.mat-input-element {
+    color: var(--primary-text-color);
+    caret-color: var(--primary-text-color);
+    font-family: $primary-font-family;
+    font-size: .95em;
+    line-height: 1.5;
+  }
+
+  // underline
+  ::ng-deep .mat-form-field-underline,
+  ::ng-deep .mat-form-field-underline.mat-focused {
+    // ::ng-deep .mat-form-field-ripple {
+    background-color: var(--primary-text-color);
+  }
+
+  // error indications
+  ///////////////////////////////
+  .mat-error {
+    color: var(--form-error-color);
+    font-weight: 500;
+  }
+
+  ::ng-deep &.mat-form-field-invalid {
+
+    // underline
+    ::ng-deep .mat-form-field-underline,
+    ::ng-deep .mat-form-field-underline.mat-focused,
+    .mat-form-field-ripple {
+      background-color: var(--form-error-color);
+    }
+
+    // asterisk
+    span {
+      color: var(--form-error-color) !important;
+      font-weight: 500;
+    }
+  }
+
+}

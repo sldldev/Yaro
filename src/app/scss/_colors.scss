@@ -1,0 +1,81 @@
+
+
+
+$black: rgba(0, 0, 0, .87);
+$middle-gray: #969696;
+$lavender:   #e0e0fd; // lavender
+$light-lavender: #ededfd;
+
+
+
+
+// light theme
+$dark-blue: #1d1953; // taken from Logo
+$middle-blue: #4f61ac; // taken from logo
+$light-blue: #a9b2d7;
+
+
+
+:root {
+  --primary-color: rgb(29, 25, 83);
+  --secondary-color: #{$middle-blue};
+  --third-color: #{$light-blue};
+  --fourth-color: #fff;
+
+  --primary-bg-color: #fff;
+  --secondary-bg-color: #a9b2d7;
+  --search-bg-color: #c3cdf1;
+  // --primary-bg-color: #{$light-blue};
+  // --secondary-bg-color: #{$middle-blue};
+
+
+  --button-bg-color: #{$dark-blue};
+  --button-hover-bg-color: #a9b2d7;
+  --button-disabled-bg-color: #a9b2d7;
+
+  --tooltip-bg-color: #4f61ac;
+  --tooltip-color: #e0e0fd;
+
+
+  --box-bg-color: #292564; //#384b94;
+  --box-bg-color-alpha: rgba(41, 37, 100, .8); //rgba(56, 75, 148, .8);
+  --box-primary-text-color: #e0e0fd;
+  --box-secondary-text-color: #a9b2d7;
+  --spinner-color: #1d1953;
+
+  --primary-text-color: #{$dark-blue};
+  --secondary-text-color: #fff;
+  --third-text-color: #ffffff;
+  --fourth-text-color: #a9b2d7;
+
+
+
+  --nav-bg-color: #1d1953;
+  --nav-text-color: #a9b2d7;
+  --nav-active-color: #fff;
+
+  --sidenav-bg-color: #1d1953;
+  --sidenav-text-color: #a9b2d7;
+  --sidenav-active-color: #fff;
+
+  --form-error-color: #d33275; //#d33275; // #5c015c;
+
+  color: rgb(41, 37, 100);
+  color: #6c81d3;
+  color: #5169c7;
+  color: #3b55b1;
+  color: #304db6;
+  color: #8ea2f1;
+  color: #d7daec;
+
+  color: #a9b2d7;
+  color: #99aaee;
+
+  color: #e0e0fd; // lavender
+
+  color: #960441;
+  color: #7f90d4;
+  color: #c3cdf1;
+  color: rgb(127, 144, 212);
+
+}
