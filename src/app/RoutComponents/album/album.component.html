@@ -1,7 +1,8 @@
+<app-options-buttons></app-options-buttons> 
 <div class="main-wrapper" *ngIf="!isLoading">
 
-  <h2>{{albumInfo.AlbumName }}</h2>
-  <p>{{albumInfo.Info}}</p>
+  <h2>{{albumInfo.name}}</h2>
+  <p>{{albumInfo.info}}</p>
   <mat-tab-group [selectedIndex]="selectedIndex" #tabGroup>
     <mat-icon>art_track</mat-icon>
     <mat-tab label="Gallery">
@@ -34,37 +35,64 @@
         Loading files...
       </ng-container>
       <mat-spinner *ngIf="isLoadingSpinner"></mat-spinner>
+
       <ng-container *ngIf="(files | async)  as files2Show">
         <ng-container *ngIf="files2Show.length !== 0; else noFiles">
 
           <div class="buttons">
             <button mat-button class="button select" (click)="chooseAll()">{{selectStr}}</button>
 
-            <button mat-button [matMenuTriggerFor]="menu2" [disabled]="deleteData.length==0" class="button select">
+            <button mat-button 
+              [matMenuTriggerFor]="albumInfo.name ==='Recycle Bin' ? recycleMenu : albumInfo.name ==='FILES_TO_DELETE' ? fileDeleteMenu : optionsMenu" 
+              [disabled]="selectedItems.length==0" class="button select">
               Options
             </button>
-            <mat-menu #menu2="matMenu">
-              <button mat-menu-item [disabled]="deleteData.length==0"
-                      (click)="deleteSelected()">
+
+            <mat-menu #optionsMenu="matMenu">
+              <button mat-menu-item [matMenuTriggerFor]="moveTo">Move</button>
+              <button mat-menu-item [matMenuTriggerFor]="copyTo">Copy</button>
+              <button mat-menu-item (click)="shareSelected()">Share</button>
+              <buttonm mat-menu-item [matMenuTriggerFor]="deleteOpts">Delete</buttonm>
+             <mat-menu #deleteOpts>
+              <button mat-menu-item (click)="deleteSelected()">
                 Delete Selected
               </button>
-              <button mat-menu-item [disabled]="deleteData.length==0"
-                      (click)="wipePhotoFromAll()">
-                Delete From All
+              <button mat-menu-item (click)="wipeFromAll()">
+                Delete From All MY Albums
               </button>
-              <button mat-menu-item [disabled]="deleteData.length==0" (click)="shareSelected()">
-                Share Selected
-              </button>
-              <button mat-menu-item [matMenuTriggerFor]="moveTo">Move To</button>
+             </mat-menu>
             </mat-menu>
             <mat-menu #moveTo="matMenu">
-              <button mat-menu-item (click)="moveSelectedToNewAlbum()">New Album</button>
-              <button mat-menu-item (click)="moveSelectedToExistingAlbum()">Existing Album</button>
+              <button mat-menu-item (click)="moveSelectedToNewAlbum()">Move to New Album</button>
+              <button mat-menu-item (click)="moveSelectedToExistingAlbum()"> Move to Existing Album</button>
             </mat-menu>
-
+            <mat-menu #copyTo="matMenu">
+              <button mat-menu-item (click)="copySelectedToNewAlbum()">Copy to New Album</button>
+                <button mat-menu-item (click)="copySelectedToExistingAlbum()">Copy to Existing Album</button>
+            </mat-menu> 
+            
+            <mat-menu #recycleMenu="matMenu">
+              <button mat-menu-item [matMenuTriggerFor]="moveTo">Move</button>
+              <button mat-menu-item [matMenuTriggerFor]="deleteOptsRes">Delete</button>
+            </mat-menu>
+            <mat-menu #deleteOptsRes>
+              <button mat-menu-item (click)="deleteSelectedFromResBin()">
+                Delete Selected
+              </button>
+              <button mat-menu-item (click)="wipeFromAllResBin()">
+                Delete From All MY Albums
+              </button>
+             </mat-menu>
+          
+             <mat-menu #fileDeleteMenu="matMenu">
+              <button  mat-menu-item (click)="assignToUser()">Assign to User</button>
+              <button mat-menu-item (click)="deleteForever()">Delete Forever</button>
+             </mat-menu>
           </div>
+
           <mat-form-field>
-            <input matInput type="text" id="inputEmail" [(ngModel)]="filterStr" placeholder="Enter search"
+            <!-- id="inputEmail" -->
+            <input matInput type="text" [(ngModel)]="filterStr" placeholder="Enter search"
                    [(ngModel)]="file_name" [ngModelOptions]="{standalone: true}">
           </mat-form-field>
 
@@ -79,20 +107,28 @@
             <button mat-menu-item>etc..</button>
           </mat-menu>
 
-          <cdk-virtual-scroll-viewport class="gallery" [itemSize]="30">
+          <cdk-virtual-scroll-viewport 
+            class="gallery"
+            appendOnly 
+            [itemSize]="30"
+           >
             <!-- additional container is required for shadow, since nothing can be seen outside of virtual scroller -->
             <div class="gallery-content">
               <div *cdkVirtualFor="let file of files2Show">
-
-                <div class="image">
-                  <app-secure-image class="image-view" [src]="this.sanitizer.bypassSecurityTrustResourceUrl(file.url)"
-                                    (click)="openImageDialog(file.url)"></app-secure-image>
-                  <mat-checkbox (change)="addRemoveFiles(file)" [ngModel]="selectAll"></mat-checkbox>
+                    <!-- This has to be its own component -->
+                <div class="image" >
+                  <!-- <app-secure-image class="image-view" [src]="file.url" -->
+                  <app-secure-image class="image-view" [src]="file.url"
+                    
+                                    (click)="openImageDialog(file)"></app-secure-image>
+                  <mat-checkbox (change)="addRemoveFiles(file)" [ngModel]="selectAll"></mat-checkbox> 
+                  <!--  [(ngModel)]="selectAll" selectedItems -->
                 </div>
-
               </div>
             </div>
           </cdk-virtual-scroll-viewport>
+            <!-- Carousel -->
+            <!-- <app-image-carousel></app-image-carousel> -->
         </ng-container>
         <ng-template #noFiles>
           <p class="no-files">No files are found</p>
@@ -101,23 +137,25 @@
 
     </mat-tab>
 
-    <mat-tab label="Upload">
+    <div *ngIf="albumInfo.name !=='Recycle Bin'">
+      <mat-tab label="Upload">
 
-      <ng-template mat-tab-label>
-        <mat-icon>add_to_photos</mat-icon>
-        <span>Upload</span>
-      </ng-template>
+        <ng-template mat-tab-label>
+          <mat-icon>add_to_photos</mat-icon>
+          <span>Upload</span>
+        </ng-template>
 
 
-      <div class="viewport">
-        <p>...</p>
-        <div>
-          <a type="button" mat-raised-button class="button" (click)="filePicker.click()">Add Photos</a>
-          <input type="file" #filePicker multiple (change)="onImagePicked($event)" [hidden]="true">
-          <br>
+        <div class="viewport">
+          <p>...</p>
+          <div>
+            <a type="button" mat-raised-button class="button" (click)="filePicker.click()">Add Photos</a>
+            <input type="file" #filePicker multiple (change)="onImageSelectedForUpload($event)" [hidden]="true">
+            <br>
+          </div>
         </div>
-      </div>
-    </mat-tab>
+      </mat-tab>
+    </div>
   </mat-tab-group>
 </div>
 

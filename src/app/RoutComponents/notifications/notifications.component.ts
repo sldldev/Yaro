@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {NotificationService} from '../../Services/notification.service';
-import {NotificationModel} from '../../DataModules/notification.model';
+import {NotificationModel} from '../../DataModels/notification.model';
 
 @Component({
   selector: 'app-notifications',

@@ -7,7 +7,8 @@ import {
 import {catchError} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {MatDialog, MatSnackBar} from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {ErrorComponent} from '../Dialogs/error/error.component';
 import {UIService} from '../Services/ui.service';
 
@@ -25,11 +26,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'An unknown error occurred!'; // init the error message
-        console.log(error);
+        console.log(req.url);
         if (error.error && error.status !== 0) {
           errorMessage = error.error; // sets new error messagen
         } else {
-          errorMessage = 'Oops Something Went Wrong!';
+          errorMessage = 'Oops Something Went Wrong! \r\n'+ req.url;
         }
         if (errorMessage === 'DUP') {
           return;

@@ -19,7 +19,12 @@ h2 {
 
   &:focus {
     outline: none;
-    background: #eee;
+    background: #d0d6db;
+  }
+
+  &:active {
+    outline: none;
+    background: #d0d6db;
   }
 
   &:hover {

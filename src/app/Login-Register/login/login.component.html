@@ -5,7 +5,7 @@
   <form (submit)="onLogin(loginForm)" #loginForm="ngForm">
     <h2>Login</h2>
     <mat-form-field>
-      <input matInput name="email" ngModel #emailInput="ngModel" type="email" required email
+      <input matInput name="Email" ngModel #emailInput="ngModel" type="email" required email
         pattern="^[^\s@]+@[^\s@.]+\.[^\s@.]+$" placeholder="Email">
 
       <mat-error *ngIf="emailInput.invalid">Please enter valid email</mat-error>

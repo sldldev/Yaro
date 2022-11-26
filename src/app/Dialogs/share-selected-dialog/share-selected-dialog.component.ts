@@ -1,10 +1,10 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {FileObject} from '../../DataModules/file.model';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {FileObject} from '../../DataModels/fileObject.model';
 import {Observable} from 'rxjs';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
-import {Users} from '../../DataModules/users.model';
+import {Users} from '../../DataModels/users.model';
 import {FollowService} from '../../Services/follow.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ShareSelectedDialogComponent implements OnInit {
   options?: Users[];
   users: Observable<Users[]>;
   something = '';
-  private selected;
+  public selected;
 
   constructor(
     private followService: FollowService,
@@ -33,11 +33,6 @@ export class ShareSelectedDialogComponent implements OnInit {
       .subscribe(
         data => {
           this.options = data;
-          // this.users2Show = data.sort(( l, r ) => {
-          //   const left = l.lastName + l.firstName;
-          //   const right = r.lastName + r.firstName;
-          //   return left < right ? -1 : 1;
-          // });
         });
 
     this.users = this.myControl.valueChanges.pipe(
@@ -57,7 +52,7 @@ export class ShareSelectedDialogComponent implements OnInit {
   }
 
   onShopSelectionChanged(selected: any) {
-    this.selected = selected._id;
+    this.selected = selected.objId;
   }
 
 

@@ -22,9 +22,7 @@
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="changeKey('first')">First Name</button>
-    <button mat-menu-item (click)="changeKey('last')">
-      Last Name
-    </button>
+    <button mat-menu-item (click)="changeKey('last')">Last Name</button>
   </mat-menu>
 
 </div>
@@ -37,9 +35,9 @@
 
   <div class="viewport" *ngIf="users2Show?.length > 0; else noUsers">
 
-    <div class="card" *ngFor="let user of users2Show | peoplePipe:filterStr:filterKey ">
+    <div class="card" *ngFor="let user of users2Show">
       <div class="card__sidebar">
-        <img mat-card-avatar class="card__header-image" [src]="user.avatar" onerror="this.src='/assets/images/man.svg'">
+        <img mat-card-avatar class="card__header-image" [src]="user.Avatar" onerror="this.src='/assets/images/man.svg'">
         <!-- social icons later
         <ul class="card__social-list">
           <li><a href="#" target="_blank"></a></li>
@@ -48,11 +46,11 @@
         </ul> -->
       </div>
       <div class="card__main">
-        <h2 class="card__main-name" id="name">{{user.lastName}}
-          {{user.firstName}}</h2>
+        <h2 class="card__main-name" id="name">{{user.LastName}}
+          {{user.FirstName}}</h2>
 
         <p class="card__content">
-          {{user._id}}
+          {{user.objId}}
         </p>
       </div>
 
@@ -65,7 +63,7 @@
           <mat-icon>person_outline</mat-icon>
           Unfollow
         </button>
-        <button mat-button class="button" [routerLink]="['/message',user._id]">
+        <button mat-button class="button" [routerLink]="['/message',user.objId]">
           <mat-icon>mail</mat-icon>
           Message
         </button>

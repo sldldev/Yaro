@@ -7,14 +7,14 @@
   </mat-card-title>
   <mat-form-field hintLabel="at least 3 characters, no more then 40">
     <!-- needs case specific error message if album title is more than 40 characters or invalid REGEX -->
-    <input matInput type="text" name="album" [(ngModel)]="albumName" required pattern="^\s*[\w ]{3,40}$"
+    <input matInput type="text" name="album" [(ngModel)]="Name" required pattern="^\s*[\w ]{3,40}$"
            placeholder="Album Title" #album="ngModel">
     <mat-error *ngIf="album.invalid">Please enter Album title</mat-error>
 
   </mat-form-field>
   <br>
   <mat-form-field>
-        <textarea matInput name="info" placeholder="Album Info" [(ngModel)]="albumInfo"
+        <textarea matInput name="info" placeholder="Album Info" [(ngModel)]="AlbumInfo"
                   cdkTextareaAutosize
                   #autosize="cdkTextareaAutosize"
                   cdkAutosizeMinRows="1"

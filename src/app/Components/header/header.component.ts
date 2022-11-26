@@ -5,7 +5,7 @@ import { Location } from '@angular/common';
 import { SignalrService } from '../../Services/signalr.service';
 import { ThemeService } from '../..//Services/theme.service';
 import { NotificationService } from '../../Services/notification.service';
-import { NotificationModel } from '../../DataModules/notification.model';
+import { NotificationModel } from '../../DataModels/notification.model';
 import { ChatService } from '../../Services/chat.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { ChatService } from '../../Services/chat.service';
  */
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  userIsAuthenticated = JSON.parse(localStorage.getItem('loggedIn') || 'false'); // init user authentication to false
+  userIsAuthenticated: any = JSON.parse(localStorage.getItem('loggedIn') || 'false'); // init user authentication to false
   private authListenerSubs: Subscription; // init the subscription
   notifications: Observable<NotificationModel[]>;
   unreadNotifications: Observable<number>;
@@ -27,13 +27,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private currentLocation = 'My Albums';
   @Output() sidenavToggle = new EventEmitter<void>(); // side nav toggle listener
   @Output() sidenavClose = new EventEmitter<void>(); // side nav close listner
-
+/* 
+  albumButtons = [
+    {
+      buttonName: 'My Albums',
+      buttonLink : '//albums',
+    },
+    {
+      buttonName: 'Add Album',
+      buttonLink: '//create',
+    },
+  ]; */
 
   /**
    * component using the service of tAuthentication Service
    * @param {AuthenticationService} authService
    */
-  constructor(private authService: AuthenticationService,
+  constructor(
+    private authService: AuthenticationService,
     private themeService: ThemeService,
     private notificationService: NotificationService,
     private messageService: ChatService) {
@@ -41,10 +52,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authListenerSubs = this.authService.getAuthStatusListener().subscribe(isAuthenticated => {
-      this.userIsAuthenticated = isAuthenticated; // on init we get the authentication status from the observable
-      console.log("User status " + this.userIsAuthenticated)
+      this.userIsAuthenticated = isAuthenticated;
+      // on init we get the authentication status from the observable
+      //console.log('User status ' + this.userIsAuthenticated);
       if (this.userIsAuthenticated === true) {
-        console.log("We are here!");
+        //console.log('User Logged in!');
         this.notificationService.getUserNotification();
         this.messageService.getUnreadMessageSize();
         this.notifications = this.notificationService.getPostUpdateListener();
@@ -55,10 +67,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     /*    this.notificationService.getUserNotification();
         this.notifications = this.notificationService.getPostUpdateListener();*/
     if (this.authService.getAuthStatus() === true) {
-      console.log("Auth status true!");
+      //console.log('Auth status true!');
       this.authService.updateAuthStatusListener();
     }
-
   }
 
   markAllAsRead() {
@@ -70,7 +81,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   onToggleSidenav() {
     this.sidenavToggle.emit();
-
   }
 
   onCloseSideNav() {
@@ -90,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.authListenerSubs.unsubscribe();
-
+    
   }
 
 

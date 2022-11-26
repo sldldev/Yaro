@@ -1,0 +1,58 @@
+<!-- <p>add-group works!</p> -->
+<app-options-buttons ></app-options-buttons>
+
+<div class="main-wrapper">
+  
+    <mat-card>
+      
+      <!--when we hear submit event - we trigger onSaveGroup method and pass the form by reference (ngForm Label)-->
+      <form (submit)="onSaveGroup(groupForm)" #groupForm="ngForm">
+        <!--#group form is label we give with NgForm to the data of the form-->
+        <mat-card-title>
+          <mat-icon 
+            id="library-icon">
+              photo_library
+          </mat-icon>
+        
+          Add Group
+        </mat-card-title>
+        <mat-form-field 
+          hintLabel="at least 3 characters, no more then 40">
+          <!-- needs case specific error message if group title is more than 40 characters or invalid REGEX -->
+          <input 
+            matInput type="text"
+            name="groupName" 
+            [ngModel]="groupEdit?.name" 
+            required pattern="^\s*[\w ]{3,40}$"
+            placeholder="Group Title" #group="ngModel">
+              <mat-error *ngIf="group.invalid">
+                Please enter Group title
+              </mat-error>
+        </mat-form-field>
+      
+        <mat-form-field>
+          <textarea 
+            matInput name="info" 
+            placeholder="Group Info" 
+            [ngModel]="groupEdit?.info"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="15">
+          </textarea>
+        </mat-form-field>
+        
+        <button 
+          [disabled]="groupForm.invalid" 
+          mat-raised-button 
+          type="submit">
+           Save Group
+        </button>
+        
+        <mat-card-footer>
+          {{groupInformation}}
+        </mat-card-footer>
+      
+      </form>
+    </mat-card>
+  </div>

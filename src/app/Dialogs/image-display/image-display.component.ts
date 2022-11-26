@@ -1,28 +1,50 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
-import {FileObject} from 'src/app/DataModules/file.model';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FileObject, ExifObject } from 'src/app/DataModels/fileObject.model';
+import { host } from 'src/app/globals';
+import { DownloadServiceService } from 'src/app/Services/download-service.service';
 import { log } from 'util';
+//import * as ol from 'ol';
+// --------
+import { saveAs } from 'file-saver';
+// import Map from 'ol/Map';
+// import View from 'ol/View';
+// import VectorLayer from 'ol/layer/Vector';
+// import Style from 'ol/style/Style';
+// import Icon from 'ol/style/Icon';
+// import OSM from 'ol/source/OSM';
+// import * as olProj from 'ol/proj';
+// import TileLayer from 'ol/layer/Tile';
 
+let map: any;
 declare var ol: any;
-
+const videoExt = '.mp4';
+const imgExt = '.webp';
 
 @Component({
   templateUrl: './image-display.component.html',
-  styleUrls: ['./image-display.component.scss']
+  styleUrls: ['./image-display.component.scss'],
 })
 export class ImageDisplayComponent implements OnInit {
-
   public dataImages: FileObject[];
-  public currentImage: string;
+  public currentImage: FileObject;
   public currentIndex: number;
-  public exif: any;
+  public exif: ExifObject;
   public exifPresent = false;
+  public isGPS = false;
   public displayGpsLocation = false;
-  public latitude;
-  public longitude;
+  public latitude: any;
+  public longitude: any;
+  public downloadMessage = 'Nothing Yet';
   map: any;
+  message: string;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { imageData: FileObject[], currentImage: string }) {
+  constructor(
+    private downladService: DownloadServiceService,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { imageData: FileObject[]; currentImage: FileObject }
+  ) {
     this.initData(data);
   }
 
@@ -30,127 +52,251 @@ export class ImageDisplayComponent implements OnInit {
    * method responsible to init image data for preview
    * @param data
    */
-  initData(data) {
+  initData(data: { imageData: FileObject[]; currentImage: FileObject }) {
     this.dataImages = data.imageData;
     this.currentImage = data.currentImage;
-    console.dir(this.dataImages);
-    console.log('this data' + this.currentImage);
-    this.currentIndex = this.dataImages.findIndex(x => x.url === this.currentImage);
-    console.log('The Index is:' + this.currentIndex);
+    // console.dir(this.dataImages);
+    //console.log('this data' + this.currentImage);
+    this.currentIndex = this.dataImages.findIndex(
+      (x) => x === this.currentImage
+    );
+    // console.log('The Index is:' + this.currentIndex);
     this.exif = this.dataImages[this.currentIndex].exifData;
     console.dir(this.exif);
-    this.handleGpsDisplay()
+    this.handleGpsDisplay();
   }
 
   /**
    * method responsible to init component and gps map data
    */
   ngOnInit(): void {
-    this.handleGpsDisplay()
+    this.handleGpsDisplay();
   }
 
-  handleGpsDisplay(){
-    console.log("Handling Gps Display")
-    /*    const index = this.exif.findIndex(x => x.name === 'GPS Latitude');
-    this.latitude = this.exif[index].value.replace(/[^\d.-]/g, ' ');
-    this.latitude = this.parseToLat(this.latitude, 'n');
-    this.longitude = this.exif[index + 2].value.replace(/[^\d.-]/g, ' ');
-    this.longitude = this.parseToLat(this.longitude, 'e');
-    console.log('this is it' + this.latitude + ':' + this.longitude);*/
-    const lat = this.exif.findIndex(p => p.name === 'Decimal Latitude');
-    const lon = this.exif.findIndex(p => p.name === 'Decimal Longitude');
-    console.log(lat);
-    // console.log('DD' + this.exif[lat].value + this.exif[lon].value);
-    if (lat > 0) {
-      this.displayGpsLocation=true;
-      log("there are cordinates" + this.displayGpsLocation)
+  handleGpsDisplay() {
+    console.log('Handling Gps Display');
+    if (this.exif != null && this.exif.gpsLatitude ) {
+
+      this.SetDdCoordinates();
+
+      console.log('!!! this is GPS:  ' + this.latitude + ':' + this.longitude);
+
+      if (this.latitude > 0) {
+
+        this.displayGpsLocation = true;
+        console.log('there are cordinates' + this.displayGpsLocation);
+
+        const mousePositionControl = new ol.control.MousePosition({
+          coordinateFormat: ol.coordinate.createStringXY(4),
+          projection: 'EPSG:4326',
+          // comment the following two lines to have the mouse position
+          // be placed within the map.
+          className: 'custom-mouse-position',
+          target: document.getElementById('mouse-position'),
+          undefinedHTML: '&nbsp;'
+        });
 
 
-      this.map = new ol.Map({
-        target: 'map',
-        layers: [
-          new ol.layer.Tile({
-            source: new ol.source.OSM()
-          }),
-          new ol.layer.Vector({
-            source: new ol.source.Vector({
-              features: [
-                new ol.Feature({
-                  geometry: new ol.geom.Point(ol.proj.fromLonLat([+this.exif[lon].value, +this.exif[lat].value])),
-                })
-              ]
+
+        this.map = new ol.Map({
+          target: 'map',
+           controls: ol.control.defaults({
+            attributionOptions: {
+              collapsible: true
+            }
+          }).extend([mousePositionControl]),
+          layers: [
+            new ol.layer.Tile({
+              source: new ol.source.OSM()
             })
+          ],
+          view: new ol.View({
+            center: ol.proj.fromLonLat([
+              this.longitude,
+              this.latitude,
+            ]),
+            zoom: 8,
           }),
-        ],
-        view: new ol.View({
-          center: ol.proj.fromLonLat([+this.exif[lon].value, +this.exif[lat].value]),
-          zoom: 8
-        }),
-      });
-    }
 
+        });
+      }
+    } else {
+      console.log('No this.exif');
+    }
+  }
+  SetDdCoordinates(): any {
+
+    this.latitude = this.SetDdCoordinate(this.exif.gpsLatitude, this.exif.gpsLatitudeRef);
+    this.longitude = this.SetDdCoordinate(this.exif.gpsLongitude, this.exif.gpsLongitudeRef);
   }
 
-  /**
-   * method responsible to preview next photo
-   */
-  nextPhoto() {
-    this.displayGpsLocation=false
-    if ((this.currentIndex++) === this.dataImages.length - 1) {
+
+  SetDdCoordinate(DMScoordinat: string , DMSref: string) {
+    const coorNumStr = DMScoordinat.replace(/[^\d.-]/g, ' ');
+    const cdd = this.parseToLat(coorNumStr, DMSref);
+   return cdd;
+  }
+
+
+  goToNextItem(n: number) {
+    //this.hideGPSDisplay();
+    // next / previous logic
+    if (this.currentIndex + n >= this.dataImages.length) {
       this.currentIndex = 0;
+    } else if (this.currentIndex + n < 0) {
+      this.currentIndex = this.dataImages.length - 1;
+    } else {
+      this.currentIndex += n;
     }
-    this.exif = this.dataImages[this.currentIndex].exifData;
-    this.handleGpsDisplay()
+
+    this.setCurrentExif();
+    this.handleGpsDisplay();
   }
 
-  /**
-   * method responsible to preview previous photo
-   */
-  previousPhoto() {
-    this.displayGpsLocation=false
-    if ((this.currentIndex--) === 0) {
-      this.currentIndex = this.dataImages.length - 1;
-    }
+  private setCurrentExif() {
     this.exif = this.dataImages[this.currentIndex].exifData;
-    this.handleGpsDisplay()
   }
+
+  private hideGPSDisplay() {
+    this.displayGpsLocation = !this.displayGpsLocation;
+
+    // if (this.displayGpsLocation) {
+    //   this.map = new Map({
+    //     target: 'thisImageLocation',
+    //     layers: [
+    //       new TileLayer({
+    //         source: new OSM()
+    //       })
+    //     ],
+    //     view: new View({
+    //       center: olProj.fromLonLat([7.0785, 51.4614]),
+    //       zoom: 5
+    //     })
+    //   });
+    // }
+  }
+
 
   /**
    * show hide exif toggle
    */
   toggleExif() {
     this.exifPresent = !this.exifPresent;
+    this.hideGPSDisplay();
   }
 
   /**
    * method responsible to change the url distanation request
    * @param url - thumbnail URL
    */
-  showPreviw(url: string) {
-    return url.replace('.TH', '.PR');
+  showPreviw(file: FileObject) {
+    let url = '';
+    if (file.url.startsWith('data:image/webp;base64,')) {
+      url = this.makeServerUrl(file);
+    } else if (file.url.startsWith('data:image/svg+xml;')) {
+      url = file.url;
+    } else {
+      url = file.url.replace('.TH', '.PR');
+    }
 
+    url = this.setVideoUrl(file, url);
+    return url;
+  }
+
+  private setVideoUrl(file: FileObject, url: string) {
+    console.log('setVideoUrl(file: FileObject, url: string)');
+    console.warn(file);
+    if (file.processingType === 2) {
+      url = url.replace(`.PR${imgExt}`, videoExt);
+    }
+    return url;
   }
 
   /**
-   * method responsible to parse DMS to DD gps cordinates
+   * method responsible to parse DMS to DD gps coordinates
    * @param gpsCordinates
    * @param direction
    */
   parseToLat(gpsCordinates, direction) {
     const gps = gpsCordinates.split('  ');
     console.dir(gps);
-    const d = gps[0];
-    const m = gps[1];
-    const s = gps[2];
 
-    let $decimal;
+    const d = +gps[0]; // 60 ** 0
+    const m = +gps[1] / 60;
+    const s = +gps[2] / 3600;
+
+    const $decimal = s + m + d;
+
     console.log($decimal);
-
-
-    $decimal = (s / 3600) + (m / 60) + d;
-
     return $decimal;
   }
+
+  makeServerUrl(file: FileObject) {
+    console.log('makeServerUrl(file: FileObject)');
+    console.warn(file);
+    let url = `${host}/SERVER/${this.getSlashedId(file.objId)}.PR${imgExt}`;
+    url = this.setVideoUrl(file, url);
+    console.warn(url);
+    return url;
+    // https://localhost:5001/SERVER/84\\3B\\1E\\61\\BF\\EB\\31\\89\\21\\3C\\53\\D4\\05\\A6\\AC\\73\\30\\40\\B5\\DD\\3B\\7C\\2C\\5A\\86\\79\\FE\\83\\20\\D6\\04\\B5.TH.webp
+  }
+
+  getSlashedId(hash64: string) {
+    let tmp = '';
+
+    for (let i = 0; i < hash64.length; i = i + 2) {
+      tmp += hash64.slice(i, i + 2) + '/';
+    }
+
+    // remove last "\" and return
+    tmp = tmp.slice(0, tmp.length - 1);
+    console.warn(tmp);
+    return tmp;
+  }
+
+  download() {
+    //const id:string ="";
+    this.downladService.downloadFile(this.dataImages[this.currentIndex].objId)
+        .subscribe((response) => {
+          if (response.type === HttpEventType.Response) {
+            console.log('response');
+            console.warn(response);
+            this.message = 'Download success.';
+            const downloadedFile = new Blob([response.body], { type: response.body.type });
+            // console.log("downloadedFile");
+            // console.warn(downloadedFile);
+            // const url = URL.createObjectURL(downloadedFile);
+            // console.log("url");
+            // console.warn(url);
+            saveAs(downloadedFile, this.dataImages[this.currentIndex].fileName + this.dataImages[this.currentIndex].fileExtension);
+
+            //window.open(response.url);
+            //this.downloadFile(response);
+            // window.location.href = response.url;
+            // this.downloadMessage = response['message'];
+          }
+
+    }),
+      (error: any) => console.log('Error downloading the file'),
+      () => console.info('File downloaded successfully');
+  }
+
+  // private downloadFile = (data: HttpResponse<Blob>) => {
+  //   const downloadedFile = new Blob([data.body], { type: data.body.type });
+  //   const url = URL.createObjectURL(downloadedFile);
+  //   window.open(url);
+	// 	// fileSaver.saveAs(downloadedFile,
+  //   //    this.dataImages[this.currentIndex].FileName + this.dataImages[this.currentIndex].FileExtension);
+
+  //   //window.open(url);
+
+  //   // const a = document.createElement('a');
+  //   // a.setAttribute('style', 'display:none;');
+  //   // document.body.appendChild(a);
+  //   // a.download = this.dataImages[this.currentIndex].objId;
+  //   // a.href = URL.createObjectURL(downloadedFile);
+  //   // a.target = '_blank';
+  //   // a.click();
+  //   // document.body.removeChild(a);
+  // }
 }
-
-

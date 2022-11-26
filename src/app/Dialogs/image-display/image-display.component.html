@@ -1,27 +1,48 @@
-<div mat-dialog-content>
-  <img [src]="showPreviw(this.dataImages[currentIndex].url)" width="750">
-</div>
-<ng-container *ngIf="exifPresent">
-  <div *ngFor="let item of exif">
-    {{item.name + ":" + item.value}}
-  </div>
-</ng-container>
-<div mat-dialog-actions>
-  <div id="map" class="map" [hidden]="!this.displayGpsLocation"></div>
-  <button mat-button (click)="previousPhoto()">PREVIOUS</button>
-  <button mat-button (click)="nextPhoto()">NEXT</button>
+<!-- IMAGE-DISPLAY.COMPONENT.HTML -->
+
+<div mat-dialog-actions class="no-margin-bottom">
+  <!-- <div id="map" class="map" [hidden]="!this.displayGpsLocation"></div> -->
+  <button mat-button (click)="goToNextItem(-1)">PREVIOUS</button>
+  <button mat-button (click)="goToNextItem(1)">NEXT</button>
+  
   <button *ngIf="!exifPresent; else hideInfo" mat-button (click)="toggleExif()">INFO</button>
   <ng-template #hideInfo>
     <button mat-button (click)="toggleExif()">HIDE</button>
   </ng-template>
+  <button mat-button (click)="download()">DOWNLOAD</button>
+  <label>{{downloadMessage}}</label>
+ 
+</div>
 
+<div mat-dialog-content class="overlay">
+  <!-- Video -->
+  <div *ngIf="this.dataImages[currentIndex].processingType===2; else imagetag">
+    <video  height="50%" controls>
+      <source [src]="showPreviw(this.dataImages[currentIndex])" type="video/mp4">
+      Your browser does not support the video tag.
+    </video> 
+  </div>
+  <!-- Image -->
+  <ng-template #imagetag>
+    <img [src]="showPreviw(this.dataImages[currentIndex])"
+    max-width="100vw"
+    >
+  </ng-template>
+  
+   <!--  onerror="this.onerror=null;this.src='../assets/filesicon.png';" -->
+</div>
+<ng-container *ngIf="exifPresent">
 
-  <!--  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-      &lt;!&ndash; This is the tree node template for leaf nodes &ndash;&gt;
-      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-        &lt;!&ndash; use a disabled button to provide padding for tree leaf &ndash;&gt;
-        <button mat-icon-button disabled></button>
-        {{node.name}}
-      </mat-tree-node>
-    </mat-tree>-->
+  <div *ngFor="let item of exif | keyvalue">
+    <p *ngIf="item.value && !item.value.toString().includes('Unknown')">
+      {{item.key + " : " + item.value}}
+    </p>
+
+  </div>
+
+</ng-container>
+<div class="map-container"  [hidden]="this.displayGpsLocation">
+  <div id="mouse-position"></div>
+  <div id="map" class="map">
+  </div>
 </div>

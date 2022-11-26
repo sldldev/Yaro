@@ -1,41 +1,48 @@
-import {Component, OnInit, ChangeDetectionStrategy, ViewChild, OnDestroy} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-import {FileService} from '../../Services/files.service';
-import {AlbumService} from '../../Services/album.service';
-import {Album} from '../../DataModules/album.model';
-import {Observable, Subscription} from 'rxjs';
-import {MatDialog} from '@angular/material';
-import {ImageDisplayComponent} from '../../Dialogs/image-display/image-display.component';
-import {FileObject} from '../../DataModules/file.model';
-import {DomSanitizer} from '@angular/platform-browser';
-import {DeleteAlbumDialogComponent} from '../../Dialogs/delete-album-dialog/delete-album-dialog.component';
-import {ErrorComponent} from '../../Dialogs/error/error.component';
-import {ShareSelectedDialogComponent} from '../../Dialogs/share-selected-dialog/share-selected-dialog.component';
-import {element} from 'protractor';
-import {MoveSelectedDialogComponent} from '../../Dialogs/move-selected-dialog/move-selected-dialog.component';
-import {NewAlbumDialogComponent} from '../../Dialogs/new-album-dialog/new-album-dialog.component';
-
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ViewChild,
+  OnDestroy,
+  ViewEncapsulation,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { FileService } from '../../Services/files.service';
+import { AlbumService } from '../../Services/album.service';
+import { AlbumModel } from '../../DataModels/album.model';
+import { Observable, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { ImageDisplayComponent } from '../../Dialogs/image-display/image-display.component';
+import { FileObject } from '../../DataModels/fileObject.model';
+import { DomSanitizer } from '@angular/platform-browser';
+import { DeleteAlbumDialogComponent } from '../../Dialogs/delete-album-dialog/delete-album-dialog.component';
+import { ErrorComponent } from '../../Dialogs/error/error.component';
+import { ShareSelectedDialogComponent } from '../../Dialogs/share-selected-dialog/share-selected-dialog.component';
+import { element } from 'protractor';
+import { MoveCopySelectedDialogComponent } from '../../Dialogs/move-selected-dialog/move-selected-dialog.component';
+import { NewAlbumDialogComponent } from '../../Dialogs/new-album-dialog/new-album-dialog.component';
+import { OptionButtonsService } from 'src/app/Services/tool-bar-buttons.service';
 
 @Component({
   selector: 'app-album',
   templateUrl: './album.component.html',
   styleUrls: ['./album.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 /*@Injectable()*/
 export class AlbumComponent implements OnInit, OnDestroy {
   @ViewChild('tabGroup') tabGroup; // child tabGroup of html init for changing value of the tab
   selectedIndex = 0; // init if the tab index
-  albumName: string; // album name will hold string data
-  albumInfo: Album; // album information will hold the object Album
-  albums: Observable<Album[]>;
+  album_id: string; // album id will hold string data
+  albumInfo: AlbumModel; // album information will hold the object Album
+  albums: Observable<AlbumModel[]>;
 
   startDateSelected;
   endDateSelected;
   filtered = false;
 
   files: Observable<FileObject[]>; // Observable for the files array
-  deleteData: FileObject[] = [];
+  selectedItems: FileObject[] = [];
   selectAll = false;
   selectStr = 'Select All';
   isLoading = true;
@@ -47,10 +54,20 @@ export class AlbumComponent implements OnInit, OnDestroy {
   numberFilesTotal = 1;
   progress;
 
-
   public file_name = '';
   public filterStr = '';
   public filterKey = 'name';
+
+  private albumButtons = [
+    {
+      buttonName: 'My Albums',
+      buttonLink: '/albums',
+    },
+    {
+      buttonName: 'Add Album',
+      buttonLink: '/album/create',
+    },
+  ];
 
   /**
    * we init the class with next modules
@@ -59,44 +76,57 @@ export class AlbumComponent implements OnInit, OnDestroy {
    * @param {AlbumService} albumService
    * @param {MatDialog} dialog
    */
-  constructor(public route: ActivatedRoute,
-              private filesService: FileService,
-              private albumService: AlbumService,
-              private dialog: MatDialog,
-              private sanitizer: DomSanitizer
-  ) {
-  }
+  constructor(
+    public route: ActivatedRoute,
+    private filesService: FileService,
+    private albumService: AlbumService,
+    private dialog: MatDialog,
+    public sanitizer: DomSanitizer,
+    private optionButtons: OptionButtonsService
+  ) {}
 
   /**
    * method we use once the components init to fetch
    * in order to present files
    */
   ngOnInit() {
-    this.albumName = this.route.snapshot.paramMap.get('albumName'); // name we get trough param
-    console.log('this albums is' + this.albumName);
+    this.optionButtons.setButtons(this.albumButtons);
+    this.album_id = this.route.snapshot.paramMap.get('id'); // name we get trough param
+    // console.log('this albums is' + this.album_Name);
     if (this.albumService.getAlbumSize()) {
-      localStorage.setItem('album', JSON.stringify(this.albumService.getAlbumInfo(this.albumName)));
+      // ?
+      // Sets album size in memory
+      localStorage.setItem(
+        'album',
+        JSON.stringify(this.albumService.getAlbumInfo(this.album_id))
+      );
     }
     this.albumInfo = JSON.parse(localStorage.getItem('album'));
-    console.log('The Album inside storage');
-    console.log(this.albumInfo);
-    console.log('Album Info returned');
-    console.dir(this.albumInfo);
-    console.log(this.albumInfo._id); // we get album info from the service
+
     this.files = this.filesService.getFileUpdateListener();
-    this.filesToUpload = this.filesService.getFileUpdateListener().subscribe(e => {
-      if (e && this.filesToUploadNumber > 0) {
-        this.filesToUploadNumber--;
-        this.progress = Math.round(100 - (100.0 * this.filesToUploadNumber) / this.numberFilesTotal);
-        if (this.progress === 100) {
-          this.uploading = false;
+    this.filesToUpload = this.filesService
+      .getFileUpdateListener()
+      .subscribe((listOfFiles) => {
+        if (listOfFiles && this.filesToUploadNumber > 0) {
+          this.filesToUploadNumber--;
+          console.log('FILES INSIDE' + this.filesToUploadNumber);
+          this.SetUploadProgress();
+          console.log('FILES PROGRESS ' + this.progress);
         }
-        console.log('FILES INSIDE' + this.filesToUploadNumber);
-        console.log('FILES Total' + this.progress);
-      }
-    }); // we init the files array with listenerdebugger;
-    this.filesService.getFiles(this.albumName); // we fetch first information from the album trough file service
+      }); // we init the files array with listenerdebugger;
+    //// NEEED TO CHANGE TO getFiles2(this.album. LIST OF IMAGES)
+    //this.filesService.getFiles2(this.album_id); // we fetch first information from the album trough file service
+    this.filesService.getFiles(this.album_id);
     this.isLoading = false;
+  }
+
+  private SetUploadProgress() {
+    this.progress = Math.round(
+      100 - (100.0 * this.filesToUploadNumber) / this.numberFilesTotal
+    );
+    if (this.progress === 100) {
+      this.uploading = false;
+    }
   }
 
   /**
@@ -104,7 +134,7 @@ export class AlbumComponent implements OnInit, OnDestroy {
    * @param URL
    */
   displayImage(URL) {
-    this.dialog.open(ImageDisplayComponent, {data: {url: URL}});
+    this.dialog.open(ImageDisplayComponent, { data: { url: URL } });
   }
 
   /**
@@ -112,18 +142,19 @@ export class AlbumComponent implements OnInit, OnDestroy {
    * file by file
    * @param event
    */
-  onImagePicked(event) {
+  onImageSelectedForUpload(event: { target: { files: any } }) {
     this.uploading = true;
     this.tabGroup.selectedIndex = 0; // in order to return to the gallery tab
     const files = event.target.files;
-    this.filesToUploadNumber = files.length;
-    this.numberFilesTotal = files.length;
     if (files) {
+      this.filesToUploadNumber = files.length;
+      this.numberFilesTotal = this.filesToUploadNumber;
       for (const file of files) {
         console.dir(file);
         const fd = new FormData();
+        fd.append('AlbumId', this.albumInfo.id); // we append the album name to the file
         fd.append('File', file);
-        this.filesService.uploadFile(this.albumInfo._id, fd); // every file in files array is send one by one
+        this.filesService.uploadFile(/* this.albumInfo.objId, */ fd); // every file in files array is send one by one
       }
     }
   }
@@ -131,171 +162,437 @@ export class AlbumComponent implements OnInit, OnDestroy {
   /**
    * this function useses the file service to del file
    * from the database
-   * @param _id
+   * @param hash64
    */
-  removeFileFromDb(_id) {
-    console.log('This is the recived Id');
-    console.log(_id);
-    this.filesService.delFileFromDb(_id, this.albumInfo._id);
-  }
-
+  /* ser */
   deleteSelected() {
-
-    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, { // we init dialog to ask user if he sure he want to delete
+    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, {
+      // we init dialog to ask user if he sure he want to delete
       // and pass the album name to the dialog
       data: {
-        message: this.deleteData.length + ' files selected '
+        message: this.selectedItems.length + ' files selected ',
+      },
+    });
+    // we subscribe to the album of Dialog close
+    dialogRef.afterClosed().subscribe((album) => {
+      if (!album) {
+        console.log(album);
+        return;
+      } else {
+        const itemsToDelete: Array<string> = [];
+
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToDelete.push(selectedItem.objId);
+          this.filesService.filterOutLocalFilesList(selectedItem);
+        });
+        console.dir('this selected' + itemsToDelete);
+
+        this.albumService.delFileFromAlbum(this.albumInfo.id, itemsToDelete);
+        this.selectedItems = [];
       }
+      this.disselectAll();
+    });
+  }
+
+  deleteSelectedFromResBin() {
+    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, {
+      // we init dialog to ask user if he sure he want to delete
+      // and pass the album name to the dialog
+      data: {
+        message: this.selectedItems.length + ' files selected ',
+      },
+    });
+    // we subscribe to the album of Dialog close
+    dialogRef.afterClosed().subscribe((album) => {
+      if (!album) {
+        console.log(album);
+        return;
+      } else {
+        const itemsToDelete: Array<string> = [];
+
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToDelete.push(selectedItem.objId);
+          this.filesService.filterOutLocalFilesList(selectedItem);
+        });
+        console.dir('this selected' + itemsToDelete);
+
+        this.albumService.delFileFromRecycleOnly(itemsToDelete);
+        this.selectedItems = [];
+      }
+      this.disselectAll();
+    });
+  }
+
+  /**
+   * Wipe???
+   * vs Delete??
+   */
+  wipeFromAll() {
+    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, {
+      // we init dialog to ask user if he sure he want to delete
+      // and pass the album name to the dialog
+      data: {
+        message: this.selectedItems.length + ' files selected ',
+      },
     });
     // we subscribe to the result of Dialog close
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!result) {
         console.log(result);
         return;
       } else {
-        this.deleteData.forEach(e => {
-          console.dir(e);
-          console.log(e._id);
-          this.filesService.delFileFromDb(e._id, this.albumInfo._id);
-          this.deleteData = [];
+        const listOfFilesToDelete: string[] = [];
+        this.selectedItems.forEach((fileObject) => {
+          console.log(fileObject.objId);
+          listOfFilesToDelete.push(fileObject.objId);
         });
+        this.filesService.delFromAllUserDb(listOfFilesToDelete);
+        this.selectedItems = [];
+        this.selectAll = false;
       }
     });
   }
 
-  wipePhotoFromAll() {
-    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, { // we init dialog to ask user if he sure he want to delete
+  wipeFromAllResBin() {
+    console.log(`wipeFromAllResBin`);
+    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, {
+      // we init dialog to ask user if he sure he want to delete
       // and pass the album name to the dialog
       data: {
-        message: this.deleteData.length + ' files selected '
-      }
+        message: this.selectedItems.length + ' files selected ',
+      },
     });
     // we subscribe to the result of Dialog close
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!result) {
         console.log(result);
         return;
       } else {
-        this.deleteData.forEach(e => {
-          console.dir(e);
-          console.log(e._id);
-          this.filesService.delFromAllUserDb(e._id);
+        const listOfFilesToDelete: string[] = [];
+        this.selectedItems.forEach((fileObject) => {
+          console.log(fileObject.objId);
+          listOfFilesToDelete.push(fileObject.objId);
         });
-        this.deleteData = [];
+
+        const looseOwnership = true;
+        this.filesService.delFromAllUserDb(listOfFilesToDelete, looseOwnership);
+        this.selectedItems = [];
+        this.selectAll = false;
       }
     });
   }
 
+  deleteForever() {
+    console.log(`wipeFromAllResBin`);
+    const dialogRef = this.dialog.open(DeleteAlbumDialogComponent, {
+      // we init dialog to ask user if he sure he want to delete
+      // and pass the album name to the dialog
+      data: {
+        message: this.selectedItems.length + ' files selected ',
+      },
+    });
+    // we subscribe to the result of Dialog close
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) {
+        console.log(result);
+        return;
+      } else {
+        const listOfFilesToDelete: string[] = [];
+        this.selectedItems.forEach((fileObject) => {
+          console.log(fileObject.objId);
+          listOfFilesToDelete.push(fileObject.objId);
+        });
+
+        const looseOwnership = true;
+        this.filesService.delFromAllUserDb(listOfFilesToDelete, looseOwnership);
+        this.selectedItems = [];
+        this.selectAll = false;
+      }
+    });
+  }
+
+  /**
+   * Shere with other Users??
+   */
   shareSelected(): void {
     const sharedFiles: Array<string> = [];
-    console.log('Data is present');
-    console.log(this.deleteData);
-    this.deleteData.forEach(e => {
-      sharedFiles.push(e._id);
+    console.log('this.itemsSelected:');
+    console.dir(this.selectedItems);
+    this.selectedItems.forEach((e) => {
+      sharedFiles.push(e.objId);
     });
+
     const dialogRef = this.dialog.open(ShareSelectedDialogComponent, {
       width: '250px',
-      data: this.deleteData
+      data: this.selectedItems,
     });
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       console.log('dialog was closed');
       console.log(result);
       if (result != null) {
-        console.dir(this.deleteData);
+        console.dir(this.selectedItems);
         console.dir(sharedFiles);
+
+        this.filesService.shareFileWithUser(
+          this.albumInfo.id,
+          result,
+          sharedFiles
+        );
+        this.selectedItems = [];
         this.selectAll = false;
-        this.deleteData = [];
-        this.filesService.shareFileWithUser(result, sharedFiles);
       }
     });
   }
 
-  moveSelectedToExistingAlbum(): void {
-    const dialogRef = this.dialog.open(MoveSelectedDialogComponent, {
-      width: '250px',
-      data: this.deleteData
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('dialog was closed');
-      console.log(result);
-      if (result != null) {
-        const sharedFiles: Array<string> = [];
-        this.deleteData.forEach(e => {
-          sharedFiles.push(e._id);
-          this.filesService.updateLocalFiles(e);
+  /**
+   * copy
+   */
+  copySelectedToNewAlbum(action: string): void {
+    const dialogRef = this.openNewAlbumDialog();
+    dialogRef.afterClosed().subscribe((retAlbum) => {
+      if (retAlbum != null) {
+        const album: AlbumModel = this.setNewAlbumObject(retAlbum);
+        const itemsToCopy: Array<string> = [];
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToCopy.push(selectedItem.objId);
         });
-        this.albumService.moveFilesToExistingAlbum(this.albumInfo._id, result, sharedFiles);
-        this.deleteData = [];
+
+        this.selectedItems = [];
+        console.dir('this selected' + itemsToCopy);
+
+        this.albumService.createNewAlbum(album).subscribe((createdAlbum) => {
+          this.albumService.copyFilesToExistingAlbum(
+            this.albumInfo.id,
+            createdAlbum.id,
+            itemsToCopy
+          );
+        });
       }
     });
   }
 
-  moveSelectedToNewAlbum(): void {
+  private openNewAlbumDialog() {
+    return this.dialog.open(NewAlbumDialogComponent, {
+      width: '360px',
+      height: '260px',
+    });
+  }
+
+  /**
+   * Cut and create
+   */
+  moveSelectedToNewAlbum(action: string): void {
+    const dialogRef = this.openNewAlbumDialog();
+    dialogRef.afterClosed().subscribe((retAlbum) => {
+      if (retAlbum != null) {
+        const album: AlbumModel = this.setNewAlbumObject(retAlbum);
+        const itemsToMove: Array<string> = [];
+
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToMove.push(selectedItem.objId);
+          this.filesService.filterOutLocalFilesList(selectedItem);
+        });
+        this.selectedItems = [];
+
+        //console.dir('this selected' + this.selectedItems);
+
+        this.albumService.createNewAlbum(album).subscribe((createdAlbum) => {
+          /*  console.log('response from server:');
+            console.dir(response);
+            console.log(response.objId);
+           */
+          this.albumService.moveFilesToExistingAlbum(
+            this.albumInfo.id,
+            createdAlbum.id,
+            itemsToMove
+          );
+          this.disselectAll();
+        });
+      }
+    });
+  }
+
+  assignToUser() {
+    this.dialog
+      .open(ShareSelectedDialogComponent, {
+        width: '250px',
+        data: this.selectedItems,
+      })
+      .afterClosed()
+      .subscribe((userId) => {
+        console.log('assignToUserDialog dialog was closed, Result:');
+        console.dir(userId);
+
+        if (userId != null) {
+          this.openNewAlbumDialog()
+            .afterClosed()
+            .subscribe((retAlbum) => {
+              if (retAlbum != null) {
+                const album: AlbumModel = this.setNewAlbumObject(retAlbum);
+                const itemsToMove: Array<string> = [];
+                this.selectedItems.forEach((selectedItem) => {
+                  itemsToMove.push(selectedItem.objId);
+                  this.filesService.filterOutLocalFilesList(selectedItem);
+                });
+                this.filesService.setOwnership(userId, album, itemsToMove);
+              }
+            });
+          //---
+        }
+      });
+  }
+
+  private disselectAll() {
+    this.selectAll = true;
+    this.selectAll = false;
+    this.selectStr = 'Select All';
+  }
+
+  private setNewAlbumObject(retAlbum: any): AlbumModel {
+    return {
+      id: null,
+      name: retAlbum.name,
+      info: retAlbum.albumInfo,
+      dateCreated: '',
+      creator: '',
+    };
+  }
+
+  /**
+   * Cut out
+   */
+  moveSelectedToExistingAlbum(): void {
+    const existingAlbumDialog = this.openExistingAlbumDialog('Move');
+    existingAlbumDialog.afterClosed().subscribe((album) => {
+      console.log('dialog was closed, Result:');
+      console.dir(album);
+      if (album != null) {
+        const itemsToMove: Array<string> = [];
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToMove.push(selectedItem.objId);
+          this.filesService.filterOutLocalFilesList(selectedItem);
+        });
+        this.selectedItems = [];
+        this.albumService.moveFilesToExistingAlbum(
+          this.albumInfo.id,
+          album.id,
+          itemsToMove
+        );
+      }
+      this.disselectAll();
+    });
+  }
+
+  /**
+   * Copy to?
+   */
+  copySelectedToExistingAlbum(): void {
+    const existingAlbumDialog = this.openExistingAlbumDialog('Copy');
+    existingAlbumDialog.afterClosed().subscribe((album) => {
+      console.log('dialog was closed');
+      console.log(album);
+      if (album != null) {
+        const itemsToCopy: Array<string> = [];
+        this.selectedItems.forEach((selectedItem) => {
+          itemsToCopy.push(selectedItem.objId);
+        });
+        console.dir('this selected' + itemsToCopy);
+        this.albumService.copyFilesToExistingAlbum(
+          this.albumInfo.id,
+          album.id,
+          itemsToCopy
+        );
+        this.selectedItems = [];
+      }
+      this.disselectAll();
+    });
+  }
+
+  private openExistingAlbumDialog(action: string) {
+    return this.dialog.open(MoveCopySelectedDialogComponent, {
+      width: '250px',
+      data: {
+        files: this.selectedItems,
+        text: action,
+      },
+    });
+  }
+
+  /**
+   * Cut and create
+   */
+  /*  moveSelectedToNewAlbum(): void {
     const dialogRef = this.dialog.open(NewAlbumDialogComponent, {
       width: '360px',
       height: '260px',
-      data: this.deleteData
+      data: this.selectedItems,
     });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result != null) {
-        const album: Album = {
-          _id: null, // we don't know the id that will be generated by the server
-          AlbumName: result.albumName, // album name
-          Info: result.albumInfo,
-          Date: ''// album description
-        };
+    dialogRef.afterClosed().subscribe((retAlbum) => {
+      if (retAlbum != null) {
+        const album: AlbumModel = this.setNewAlbumObject(retAlbum);
         const sharedFiles: Array<string> = [];
-        this.deleteData.forEach(e => {
-          sharedFiles.push(e._id);
-          this.filesService.updateLocalFiles(e);
+        this.selectedItems.forEach((e) => {
+          sharedFiles.push(e.objId);
+          this.filesService.filterOutLocalFilesList(e);
         });
-        this.deleteData = [];
-        console.dir('this selected' + this.deleteData);
-        this.albumService.movePhotosToNewAlbum(album).subscribe(response => {
-          console.log('response from server:');
+        this.selectedItems = [];
+        //console.dir('this selected' + this.selectedItems);
+        this.albumService.movePhotosToNewAlbum(album).subscribe((response) => {
+/*           console.log('response from server:');
           console.dir(response);
-          console.log(response.id);
-          this.albumService.moveFilesToExistingAlbum(this.albumInfo._id, response.id, sharedFiles);
+          console.log(response.objId); * /
+          this.albumService.moveFilesToExistingAlbum(
+            this.albumInfo.objId,
+            response.objId,
+            sharedFiles
+          );
           this.selectAll = false;
         });
-
       }
     });
-  }
+  } */
 
+  /**
+   *
+   * @param file
+   */
   addRemoveFiles(file: FileObject) {
-    const index = this.deleteData.findIndex((e) => e._id === file._id);
+    const index = this.selectedItems.findIndex(
+      (e: FileObject) => e.objId === file.objId
+    );
     if (index === -1) {
-      this.deleteData.push(file);
+      this.selectedItems.push(file);
     } else {
-      this.deleteData.splice(index, 1);
+      this.selectedItems.splice(index, 1);
     }
+    console.dir(this.selectedItems);
   }
 
-  openImageDialog(fileURL: string) {
-    const dialogRef = this.dialog.open(ImageDisplayComponent, { // we init dialog to ask user if he sure he want to delete
+  openImageDialog(file: FileObject) {
+    const dialogRef = this.dialog.open(ImageDisplayComponent, {
+      // we init dialog to ask user if he sure he want to delete
       // and pass the album name to the dialog
       data: {
         imageData: this.filesService.getCurrentFiles(),
-        currentImage: fileURL
-      }
+        currentImage: file,
+      },
+      panelClass: 'my-custom-dialog-class',
     });
   }
 
-
   chooseAll() {
     if (!this.selectAll) {
-      this.files.forEach(file => {
+      this.files.forEach((file) => {
         console.log('Adding all');
         console.dir(file);
         if (file != null) {
-          file.forEach(data => {
-            this.deleteData.push(data);
+          file.forEach((data) => {
+            this.selectedItems.push(data);
           });
         }
       });
     } else {
-      this.deleteData = [];
+      this.selectedItems = [];
     }
     this.selectAll = !this.selectAll;
     this.selectStr = this.selectAll ? 'Unselect All' : 'Select All';
@@ -306,20 +603,31 @@ export class AlbumComponent implements OnInit, OnDestroy {
     this.filesService.clearFiles();
   }
 
+  public isSelected(file: FileObject) {
+    return this.selectedItems.includes(file);
+  }
   printDates() {
     this.filtered = true;
     console.log(this.startDateSelected + ':' + this.endDateSelected);
-    if (this.startDateSelected && this.endDateSelected && this.startDateSelected < this.endDateSelected) {
-      this.filesService.filterFilesByDate(this.startDateSelected, this.endDateSelected);
+    if (
+      this.startDateSelected &&
+      this.endDateSelected &&
+      this.startDateSelected < this.endDateSelected
+    ) {
+      this.filesService.filterFilesByDate(
+        this.startDateSelected,
+        this.endDateSelected
+      );
     } else {
       if (this.startDateSelected == null && this.endDateSelected == null) {
         this.filesService.resetFilter();
       } else {
-        const dialogRef = this.dialog.open(ErrorComponent, { // we init dialog to ask user if he sure he want to delete
+        const dialogRef = this.dialog.open(ErrorComponent, {
+          // we init dialog to ask user if he sure he want to delete
           // and pass the album name to the dialog
           data: {
-            message: 'Wrong date selected'
-          }
+            message: 'Wrong date selected',
+          },
         });
       }
     }
@@ -332,4 +640,3 @@ export class AlbumComponent implements OnInit, OnDestroy {
     this.filtered = false;
   }
 }
-

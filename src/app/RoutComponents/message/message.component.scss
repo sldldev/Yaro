@@ -6,19 +6,21 @@
 }
 
 .message {
-  width: 80%;
-  margin-right: auto;
+  width: 90%;
+  // margin-right: auto;
+  margin-left: 2em;
 
   display: flex;
-  background-color: #fff;
+  background-color: var(--primary-bg-color);
   // box-shadow: 0 3px 6px rgba(0, 0, 0, 0.26), 0 3px 6px rgba(0, 0, 0, 0.23);
   // box-shadow:  inset 1px 1px 3px rgba(0, 0, 0, .3);
   // box-shadow: inset $box-shadow;
   border: 1px solid rgb(223, 221, 221);
 
   margin-bottom: 10px;
-  padding: .5em 0 .5em 2em;
-  border-radius: 5rem;
+  padding: 0.5em;
+  border-radius: 0 10px 0px 0;
+  flex-direction: row-reverse;
 
   @media (max-width: $tablet) {
     padding: 5px;
@@ -26,8 +28,20 @@
   }
 }
 
+
+.reply-message{
+  flex-direction: unset;
+  margin-left: 0;
+  border-radius: 10px 0 0 0;
+
+  .card{
+    border-radius: 10px 0 0 0;
+  }
+}
+
 .card {
-  background-color: transparent;
+  height: 65px;
+  background-color: var(--primary-bg-color);
   box-shadow: none;
   width: 10rem;
   min-width: 10rem;
@@ -36,12 +50,14 @@
   flex-grow: 0;
 
   border-right: 1px solid rgba(0, 0, 0, .2);
-  border-radius: 0;
+  // border-radius: 5px;
+  border-radius: 0 10px 0 0;
   grid-template-columns: auto;
 
   .card__main {
     align-self: center;
-    background-color: transparent;
+    text-align: center;
+    background-color: var(--primary-bg-color);
     padding: 0;
 
     @media (max-width: $tablet) {
@@ -49,40 +65,46 @@
     }
 
     .card__main-name {
-      color: var(--primary-color);
+      color: var(--primary-text-color);
       font-weight: 700;
       font-size: 0.7em;
 
       &::after {
-        border-bottom: 1px solid var(--secondary-color);
+        border-bottom: none;
       }
     }
 
     .card__content {
-      color: var(--primary-color);
+      color: var(--primary-text-color);
       font-size: 0.5em;
     }
   }
 }
 
 .messageContent {
-  padding: .5em;
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  padding-left: 5px;
   align-self: stretch;
   flex-grow: 1;
-  color: var(--primary-color);
+  color: var(--primary-text-color);
   font-size: .8em;
   font-weight: 500;
   display: flex;
   align-items: center;
+  
 }
 
-.isOwnMessageContainer {
-  // border-right: 10px solid var(--box-bg-color);
-  margin-left: auto;
-  margin-right: unset;
+// .isOwnMessageContainer {
+//   // border-right: 10px solid var(--box-bg-color);
+//   margin-left: auto;
+//   margin-right: unset;
+//   background-color: $light-lavender;
+//   margin-left: 1px;
+// }
 
-  background-color: $light-lavender;
-}
+// .receivedMessageContainer {}
 
 // .isOwnTimestamp {
 //   color: var(--box-bg-color);
@@ -97,9 +119,9 @@
 //   // color: var(--box-primary-text-color);
 // }
 
-// .isOwnSender {
-//   color: #E1F5FE;
-// }
+.isOwnSender {
+  color: var(--primary-text-color);
+}
 
 // .messageContainer {
 //   width: 100%;

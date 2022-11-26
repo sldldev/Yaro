@@ -1,0 +1,45 @@
+<div class="search-container">
+    <div class="search">
+      <!-- <button mat-mini-fab>
+              <i class="material-icons">search</i>
+            </button> -->
+  
+      <!-- <div class="icon">
+        <img src="/assets/images/search.svg" alt="search">
+      </div> -->
+      <i class="material-icons">search</i>
+      <mat-form-field *ngIf="curentfilterOption.value!=='date'; else dateSearch ">
+        <!--      <input matInput type="text" id="inputEmail" (input)="onInput()" placeholder="Enter album name to search"
+                     [(ngModel)]="album_name" [ngModelOptions]="{standalone: true}">-->
+        <input matInput type="text"  [(ngModel)]="filterStr" (input)="newFilterPipe(filterStr)" placeholder="Enter {{curentfilterOption.Label}} to search"
+               [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+
+      <ng-template #dateSearch>
+        <mat-form-field>
+          <input matInput [matDatepicker]="startDate" placeholder="Choose start date" [(ngModel)]="startDateSelected" (ngModelChange)="dateSearched()">
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <input matInput [matDatepicker]="endDate" placeholder="Choose end date" [(ngModel)]="endDateSelected" (ngModelChange)="dateSearched()">
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate></mat-datepicker>
+        </mat-form-field>
+      <!-- <button mat-button class="button select" (click)="dateSearched()">Filter Dates</button> -->
+      <button mat-button class="button select" (click)="resetDateFilter()">Reset</button>
+    </ng-template>
+  
+    </div>
+  
+    <button mat-button class="sort" [matMenuTriggerFor]="menu">
+      <i class="material-icons" matTooltip="sort by" matTooltipPosition="left">
+        keyboard_arrow_down
+      </i>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item  *ngFor="let filter of filterOptions" (click)="changeKey(filter.Value)">{{filter.Label}}</button>
+    </mat-menu>
+</div>
+  

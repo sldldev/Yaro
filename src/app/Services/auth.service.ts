@@ -2,14 +2,14 @@
  * Imports of used components and modules
  */
 import {HttpClient} from '@angular/common/http';
-import {AuthData} from '../DataModules/auth-data.model';
+import {AuthData} from '../DataModels/auth-data.model';
 
 import {UIService} from './ui.service';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs/internal/Subject';
-import {Album} from '../DataModules/album.model';
-import {Users} from '../DataModules/users.model';
+import {AlbumModel} from '../DataModels/album.model';
+import {Users} from '../DataModels/users.model';
 import {map, tap} from 'rxjs/operators';
 import {SignalrService} from './signalr.service';
 import {host} from '../globals';
@@ -25,6 +25,9 @@ export class AuthenticationService {
   private userName = (localStorage.getItem('userName') || 'null');
   private userID = (localStorage.getItem('userID') || 'null');
   private avatar = (localStorage.getItem('avatar') || '/assets/images/man.svg');
+
+  // ?? Coockie
+  
   // public currentlocalhost = 'https://localhost:5001';
   private users: Users[] = []; // albums array
   private album: Users;
@@ -38,7 +41,10 @@ export class AuthenticationService {
    * @param {Router} router
    * @param uiService
    */
-  constructor(private http: HttpClient, private router: Router, private uiService: UIService) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private uiService: UIService) {
   }
 
   /**
@@ -47,7 +53,7 @@ export class AuthenticationService {
    */
   getToken() {
     const tmp = localStorage.getItem('token');
-    console.log('Get toke ' + tmp);
+    //console.log('Get token ' + tmp);
     return tmp;
   }
 
@@ -111,9 +117,9 @@ export class AuthenticationService {
    */
   createUser(email: string, password: string, firstName: string, lastName: string) {
     this.uiService.loadingChanged.next(true);
-    const authData: AuthData = {username: email, password: password, firstName: firstName, lastName: lastName};
+    const authData: AuthData = {email: email, username: email, password: password, firstName: firstName, lastName: lastName};
 
-    this.http.post(host + '/api/auth/register', authData)
+    this.http.post(host + '/api/Auth/register', authData)
       .subscribe(serverResponse => {
         console.log(serverResponse); // log in favor of debug
         this.uiService.loadingChanged.next(false);
@@ -144,8 +150,9 @@ export class AuthenticationService {
    * @param id
    */
   getUserById(id) {
-    return this.http.get<{ id: string, firstName: string, lastName }>(host + '/api/auth/user/' + id)
-      .pipe(tap(console.log), map(serverResponse => serverResponse));
+    console.warn(`getUserById ${id}`);
+    return this.http.get<{ Id: string, FirstName: string, LastName }>(host + '/api/auth/user/' + id)
+      .pipe(tap(console.warn), map(serverResponse => serverResponse));
   }
 
   /**
@@ -155,31 +162,45 @@ export class AuthenticationService {
    * @param {string} password
    */
   login(email: string, password: string) {
+    // debugger;
     this.uiService.loadingChanged.next(true);
-    const authData: AuthData = {username: email, password: password, firstName: 'null', lastName: 'null'};
+    const authData: AuthData = {email: email, username: email, password: password, firstName: 'null', lastName: 'null'};
 
     this.http.post<{ token: string, userName: string, userID: string, avatar: string }>(host + '/api/auth/login', authData)
       .subscribe(serverResponse => {
-        console.log(serverResponse);  // log for debug purpose
-        this.uiService.loadingChanged.next(false);
-        console.log('LogResponse' + serverResponse.token);
-        const token = serverResponse.token; // token is the serverResponse information
-        const userName = serverResponse.userName;
-        const userID = serverResponse.userID;
-        const avatar = (serverResponse.avatar != null) ? serverResponse.avatar : '/assets/images/man.svg';
-        this.token = token; // init token with the token received from server
-        this.userName = userName;
-        this.userID = userID;
-        this.isAuthenticated = true; // status of authentication changed to true
-        this.avatar = avatar;
-        localStorage.setItem('loggedIn', 'true');
-        localStorage.setItem('token', this.token);
-        localStorage.setItem('userName', this.userName);
-        localStorage.setItem('userID', this.userID);
-        localStorage.setItem('avatar', this.avatar);
-        this.authStatusListener.next(true); // triggers that authStatusListnere with True value
-        this.router.navigate(['/albums']); // navigates to the /albums component
+        this.onLoginSubscriptionResponce(serverResponse);
+        // navigates to the /albums component
       });
+  }
+
+  /**
+   *
+   * @param serverResponse
+   */
+  private onLoginSubscriptionResponce(serverResponse: { token: string; userName: string; userID: string; avatar: string; }) {
+    // console.log(serverResponse); // log for debug purpose
+    this.uiService.loadingChanged.next(false);
+
+    // console.log('LogResponse' + serverResponse.token);
+    const token = serverResponse.token; // token is the serverResponse information
+    const userName = serverResponse.userName;
+    const userID = serverResponse.userID;
+    const avatar = (serverResponse.avatar != null) ? serverResponse.avatar : '/assets/images/man.svg';
+
+    this.token = token; // init token with the token received from server
+    this.userName = userName;
+    this.userID = userID;
+    this.isAuthenticated = true; // status of authentication changed to true
+    this.avatar = avatar;
+
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('token', this.token);
+    localStorage.setItem('userName', this.userName);
+    localStorage.setItem('userID', this.userID);
+    localStorage.setItem('avatar', this.avatar);
+
+    this.authStatusListener.next(this.isAuthenticated); // true); //triggers that authStatusListnere with True value
+    this.router.navigate(['/albums']);
   }
 
   /**

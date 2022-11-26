@@ -1,0 +1,110 @@
+<p>admin-controlls works!</p>
+
+<!-- <app-options-buttons></app-options-buttons>
+<!-- <app-filter-by [filterOptions]="albumsFilterOptions" (newFilterPipeEvent)="updateFilter($event)" (dateSearchedEvent)="filterByDate($event)" (resetDateFilterEvent)="resetDateFilter()"></app-filter-by> -->
+
+
+
+
+
+<!-- List Userov - active or not 
+<mat-selection-list  #shoes>
+    <mat-list-option *ngFor="let shoe of ['one','two','three']">
+      {{shoe}}
+    </mat-list-option>
+  </mat-selection-list>
+  
+  <p>
+    Options selected: {{shoes.selectedOptions.selected.length}}
+  </p>
+
+ -->
+
+  <div class="album py-5 bg-light main-wrapper">
+  <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+    <li [ngbNavItem]="1">
+      <a ngbNavLink>Backup</a>
+      <ng-template ngbNavContent>
+        <p>This will start the backup of MongoDb collections</p>
+          <app-admin-backup>
+            Here is the page
+          </app-admin-backup>
+
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="2">
+      <a ngbNavLink>Restore</a>
+      <ng-template ngbNavContent>
+        <p> This operation will start the restore operation of MongoDB</p>
+ 
+        
+
+        <app-admin-restore></app-admin-restore>
+        
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="3">
+      <a ngbNavLink>User Administration</a>
+      <ng-template ngbNavContent>
+        <p>Here you can edit users properties</p>
+        <div>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()"
+                              [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+          
+            <!-- Position Column -->
+            <ng-container matColumnDef="position">
+              <th mat-header-cell *matHeaderCellDef> No. </th>
+              <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+            </ng-container>
+          
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+          
+            <!-- Weight Column -->
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef> Weight </th>
+              <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+            </ng-container>
+          
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="symbol">
+              <th mat-header-cell *matHeaderCellDef> Symbol </th>
+              <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+            </ng-container>
+          
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                (click)="selection.toggle(row)">
+            </tr>
+          </table>
+          
+
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+  
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  
+  <pre>Active: {{ active }}</pre>
+</div>

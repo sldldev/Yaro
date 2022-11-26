@@ -1,0 +1,54 @@
+<!-- <a>Welcome to Group</a> -->
+<app-options-buttons></app-options-buttons> 
+<!-- <app-tool-barbuttons></app-tool-barbuttons> -->
+<app-filter-by [filterOptions]="groupsFilterOptions" (newFilterPipeEvent)="updateFilter($event)"></app-filter-by>
+
+<div class="main-wrapper">
+<!-- <label>{{filterStr}}</label>
+<label>{{filterKey}}</label> -->
+
+   <ng-container *ngIf="(groups$ | async)  as groups">
+<!--      <ul>
+       <li *ngFor="let grp of groups$">{{grp.name}}</li>
+     </ul> -->
+
+    <div class="viewport" *ngIf="groups.length !== 0; else noGroups">
+      
+
+      <mat-card *ngFor="let group of groups| groupPipe:filterStr:filterKey"  matTooltip="{{group.info}}"
+                matTooltipPosition="above">
+
+                <!-- | groupPipe:filterStr:filterKey" -->
+
+        <mat-card-header>
+          <mat-card-title> {{group.name}}</mat-card-title>
+          <mat-card-subtitle>{{group.dateCreated | date:'short'}}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-actions>
+          <a class="button" [routerLink]="['/group',group.id]">Open</a>
+          <div class="simple-link" [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </div>
+        </mat-card-actions>
+
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="['/group',group.id]">
+            <mat-icon>create</mat-icon>
+            <span>Edit</span>
+          </button>
+          <button mat-menu-item (click)="onDelete(group.objId, group.name)">
+            <mat-icon>delete_sweep</mat-icon>
+            <span>Delete</span>
+          </button>
+        </mat-menu>
+
+      </mat-card>
+
+
+    </div>
+    <ng-template #noGroups>
+      <p class="no-groups">No groups are found</p>
+    </ng-template>
+  </ng-container>
+</div>

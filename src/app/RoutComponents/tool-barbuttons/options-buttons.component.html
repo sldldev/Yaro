@@ -1,0 +1,13 @@
+<!-- <p>tool-barbuttons works!</p> -->
+
+  <div *ngIf="inputButtons !== null" class="option-buttons-container">
+    <a mat-button 
+    class="text-link"
+    *ngFor="let button of inputButtons"
+    routerLink="{{button.buttonLink}}"
+    routerLinkActive="active"
+    routerLinkActiveOptions="{exact:true}"
+    (click)="onCloseSideNav()">
+        {{button.buttonName}}
+    </a>
+  </div>

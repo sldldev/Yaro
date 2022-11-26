@@ -19,11 +19,11 @@
       </div>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngIf="notification.read!=true" (click)="markAsRead(notification.id)">
+        <button mat-menu-item *ngIf="notification.read!=true" (click)="markAsRead(notification.objId)">
           <mat-icon>done</mat-icon>
           <span>Mark as Read</span>
         </button>
-        <button mat-menu-item (click)="deleteNotification(notification.id)">
+        <button mat-menu-item (click)="deleteNotification(notification.objId)">
           <mat-icon>delete_sweep</mat-icon>
           <span>Delete</span>
         </button>
@@ -42,8 +42,8 @@
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button class="button" *ngIf="notification.read!=true"
-        (click)="markAsRead(notification.id)">MARK AS READ</button>
-      <button mat-raised-button class="button" (click)="deleteNotification(notification.id)">DELETE</button>
+        (click)="markAsRead(notification.objId)">MARK AS READ</button>
+      <button mat-raised-button class="button" (click)="deleteNotification(notification.objId)">DELETE</button>
     </mat-card-actions>
   </mat-card> -->
 

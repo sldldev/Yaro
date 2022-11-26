@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {AlbumService} from '../../Services/album.service';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {FileObject} from '../../DataModules/file.model';
+//import {AlbumService} from '../../Services/album.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {FileObject} from '../../DataModels/fileObject.model';
 
 @Component({
   selector: 'app-new-album-dialog',
@@ -9,19 +9,20 @@ import {FileObject} from '../../DataModules/file.model';
   styleUrls: ['./new-album-dialog.component.css']
 })
 export class NewAlbumDialogComponent implements OnInit {
-  public albumName = '';
-  public albumInfo = '';
+  public Name = '';
+  public AlbumInfo = '';
 
-  constructor(private albumService: AlbumService,
+  constructor(//private albumService: AlbumService,
               public dialogRef: MatDialogRef<NewAlbumDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: FileObject[]) {
+              //@Inject(MAT_DIALOG_DATA) public data: FileObject[]
+              ) {
   }
 
   ngOnInit() {
   }
 
   submitAlbum() {
-    const album = {albumName: this.albumName, albumInfo: this.albumInfo};
+    const album = {Name: this.Name, AlbumInfo: this.AlbumInfo};
     return album;
   }
 

@@ -1,5 +1,7 @@
 import {Observable, Subject} from 'rxjs';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class UIService {
   loadingChanged = new Subject<boolean>(); // init of loadingChanged as new Subject<boolean>
 

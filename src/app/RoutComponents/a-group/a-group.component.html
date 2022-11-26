@@ -1,0 +1,30 @@
+<p>a-group works!</p>
+<app-options-buttons></app-options-buttons> 
+<!-- <app-filter-by [filterOptions]="usersFilterOptions" (newFilterPipeEvent)="updateFilter($event)"></app-filter-by> -->
+
+<div  *ngIf="(selectedGroup$ | async) as group;" >
+   <div class="main-wrap" *ngIf="edit === false; else editview">
+        <div class="my-group-users">
+            <app-users-list [listOfUsers]="memU"></app-users-list>
+        </div>
+        <div class="control-wrap">
+            <h1>{{group.name}}</h1>
+            <button (click)="allowEdit()">Edit</button>
+        </div>
+    </div>
+    <ng-template  #editview>
+        <div class="main-wrap">
+            <div class="my-group-users">
+                <app-users-list [listOfUsers]="memU" (selectedUsersEvent)="onRemoveUserSelected($event)"></app-users-list>
+            </div>
+            <div class="control-wrap">
+                <h1>{{group.name}}</h1>
+                <button (click)="saveMembers(group)">Save</button>
+            </div>
+            <div class="users-to-add">
+                <app-users-list [listOfUsers]="nMemU" (selectedUsersEvent)="onUserSelected($event)"></app-users-list>
+            </div>
+        </div>
+    </ng-template>
+    
+</div>

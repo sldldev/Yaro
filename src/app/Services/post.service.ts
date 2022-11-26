@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
-import {Post} from '../DataModules/post.model';
+import {Post} from '../DataModels/post.model';
 import {map, tap} from 'rxjs/operators';
 import {host} from '../globals';
 
@@ -9,8 +9,8 @@ import {host} from '../globals';
 export class PostService {
   private posts: Post[] = []; // albums array
   private post: Post;
-  private postUpdated = new Subject<Post[]>(); // albumsUpdated is subject we want to observe
-  public currentlocalhost = 'https://localhost:5001';
+  private postUpdated = new Subject<Post[]>(); // is subject we want to observe
+
 
   constructor(private http: HttpClient) {
   }
@@ -30,7 +30,6 @@ export class PostService {
         this.postUpdated.next([...this.posts]);
         console.dir(this.posts);
       });
-
   }
 
   /**
@@ -44,7 +43,7 @@ export class PostService {
    * method responsible to retrieve all posts.
    */
   getAllPosts() {
-    return this.http.get(host + '/api/posts/post/')
+    return this.http.get(host + '/api/posts/posts/')
       .pipe(tap(console.log), map(serverResponse => serverResponse)) // we re-edit the information to remove the  messages
       .subscribe(files => {
           this.posts = files;
@@ -77,7 +76,7 @@ export class PostService {
    * @param postId
    */
   postComment(comment, postId) {
-    return this.http.post(host + '/api/posts/comment/', {Comment: comment, PostID: postId})
+    return this.http.post(host + '/api/posts/comment/', {Comment: comment, PostobjId: postId})
       .pipe(tap(console.log), map((serverResponse => serverResponse)))
       .subscribe((data) => {
           console.log('Received Data:' + data);

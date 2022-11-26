@@ -1,5 +1,23 @@
+
 <ul class="list-group mt-4">
-  <li class="list-group-item" (click)="userClicked(user)" *ngFor="let user of users$ | async">
+  <li class="list-group-item" (click)="userClicked(user)" *ngFor="let user of videoUsers$ | async">
     {{user.userName}}
   </li>
 </ul>
+
+<!-- <form class="example-form">
+  <mat-form-field class="example-full-width">
+    <input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+           [formControl]="myControl"
+           [matAutocomplete]="auto">
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option *ngFor="let option of optionsUsersList" [value]="option.FirstName+' '+option.LastName"
+                  (onSelectionChange)="userClicked(option)">
+        {{option.FirstName + " " + option.LastName}}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form> -->

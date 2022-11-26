@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Users} from '../../DataModules/users.model';
+import {Users} from '../../DataModels/users.model';
 import {FollowService} from '../../Services/follow.service';
 
 
@@ -29,7 +29,7 @@ export class FollowingComponent implements OnInit {
 
   unfollow(user) {
     console.log(user);
-    this.followService.unFollowUser(user._id);
+    this.followService.unFollowUser(user.objId);
   }
 
 }

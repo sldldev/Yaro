@@ -5,32 +5,37 @@
       <mat-icon>menu</mat-icon>
     </button>
 
-    <img class="logo" src="/assets/images/logoWhite.svg">
+    <a routerLink="/albums"><img class="logo" src="/assets/images/logoWhite.svg"></a>
 
   </div>
   <!--  MAYBE SHOW USERNAME NEXT TO LOGO. ("HELLO {{userName}}") -->
 
   <div class="toolbar__right">
 
-    <!-- albums -->
+    <!-- [inputButtons]="albumButtons"  -->
+    <!-- <app-tool-barbuttons [inputButtons]="albumButtons" (sidenavClose)="onCloseSideNav()"></app-tool-barbuttons> -->
+
+
+<!--     
     <a mat-button *ngIf="userIsAuthenticated" class="text-link" routerLink="/albums" routerLinkActive="active"
        (click)="onCloseSideNav()">
       My Albums
     </a>
-
+    
     <a mat-button *ngIf="userIsAuthenticated" class="text-link" routerLink="/create" routerLinkActive="active"
        (click)="onCloseSideNav()">
       Add Album
-    </a>
+    </a> -->
 
     <!-- registration -->
+  <!-- <div class="register">
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/register/login" routerLinkActive="active"
        [routerLinkActiveOptions]="{exact:true}">Login</a>
 
     <a *ngIf="!userIsAuthenticated" mat-button routerLink="/register/signUp" routerLinkActive="active"
        [routerLinkActiveOptions]="{exact:true}">SignUp</a>
-
-
+   </div>
+ -->
     <!-- icons  -->
     <a *ngIf="userIsAuthenticated" mat-button (click)="onLogout()" matTooltip="logout" matTooltipPosition="below">
       <mat-icon>exit_to_app</mat-icon>
@@ -55,7 +60,7 @@
             <!-- put only unread notifications here -->
             <div class="card">
               <div class="card__main">
-                <h2 class="card__main-name" id="name">{{notification.createdAt | date:'short'}}
+                <h2 class="card__main-name" id="name">{{notification.creationDate | date:'short'}}
                 </h2>
                 <p class="card__content">
                   {{notification.message}}

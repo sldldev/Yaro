@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ChatMessage} from '../../DataModules/chat-message.model';
+import {ChatMessage} from '../../DataModels/chat-message.model';
 
 @Component({
   selector: 'app-message',
@@ -8,8 +8,11 @@ import {ChatMessage} from '../../DataModules/chat-message.model';
 })
 export class MessageComponent implements OnInit {
   @Input() chatMessage: ChatMessage;
-  @Input() userID: string;
-  id: string;
+  @Input() userObjId: string;
+  
+  
+  resObjId: string;
+
   senderName: string;
   messageContent: string;
   timeStamp: string;
@@ -18,11 +21,15 @@ export class MessageComponent implements OnInit {
   }
 
   ngOnInit(chatMessage = this.chatMessage) {
+    console.log(this.userObjId);
     console.dir(chatMessage);
-    this.senderName = chatMessage.senderName;
+    this.senderName = chatMessage.SenderName;
     this.messageContent = chatMessage.body;
-    this.timeStamp = chatMessage.createdAt;
-    this.id = chatMessage.receiverId;
+    this.timeStamp = chatMessage.dateCreated;
+    this.resObjId = chatMessage.receiverId;
+  }
+  isMyMessage(){
+    return this.resObjId===this.userObjId? 'reply-message': '';
   }
 
 }

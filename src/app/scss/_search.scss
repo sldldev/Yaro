@@ -3,7 +3,8 @@
 
 .main-wrapper {
   // border: 2px solid red;
-  margin-top: $main-header-height + 50px;
+  margin-top: $main-header-height;
+  /*  + 50px; */
 }
 
 .search-container {
@@ -11,7 +12,7 @@
   align-items: center;
   margin: 0;
 
-  position: fixed;
+  /* position: fixed; */
   top: $main-header-height;
 
   @media (max-width: $mobile-large) {

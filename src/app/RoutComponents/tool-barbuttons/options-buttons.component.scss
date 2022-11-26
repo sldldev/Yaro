@@ -1,0 +1,52 @@
+@import "../../scss/_base";
+@import "../../scss/_card";
+
+div.option-buttons-container{
+  display: flex;
+  justify-content: center;
+}
+a.mat-button {
+    font-family: $header-font-family;
+    font-size: 1.6rem;
+    height: 100%;
+    //display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--primary-text-color);
+    border: 1px solid transparent;
+    transition: .3s;
+
+
+    @media (max-width: $tablet) {
+      font-size: 2rem;
+      min-width: 50px;
+
+      &.text-link {
+        display: none;
+      }
+
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    &:hover {
+      color: var(--fourth-text-color);
+      opacity: 1;
+    }
+    &:focus {
+      color: var(--primary-text-color);
+      opacity: 1;
+    }
+
+    &.active {
+      color: var(--primary-text-color);
+      border-bottom: 1px solid var(--secondary-color);
+      border-radius: 0;
+
+     /*  &:hover {
+        color: var(--primary-text-color);
+        border-bottom-color: var(--primary-color);
+      } */
+    }
+  }
