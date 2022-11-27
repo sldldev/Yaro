@@ -42,3 +42,5 @@ Thumbs.db
 
 #archives
 *.rar
+node_modules/@angular/cdk/node_modules/parse5/lib/common/doctype.js
+.gitconfig
