@@ -1,18 +1,20 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { map, tap } from "rxjs/operators";
-import { BehaviorSubject, Observable } from "rxjs";
-import { FileObject } from "../DataModels/fileObject.model";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { FileObject } from '../DataModels/fileObject.model';
 //import { AlbumModel } from '../DataModels/album.model';
-import { host } from "../globals";
-import { NewAlbumDialogComponent } from "../Dialogs/new-album-dialog/new-album-dialog.component";
-import { AlbumModel } from "../DataModels/album.model";
+import { host } from '../globals';
+import { NewAlbumDialogComponent } from '../Dialogs/new-album-dialog/new-album-dialog.component';
+import { AlbumModel } from '../DataModels/album.model';
 //import { forEachComment } from 'tslint';
 
 // we declare that this service should be created
 // by the root application injector.
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class FileService {
+  private dataApi: string = host + '/api/data/';
+
   private files: FileObject[] = []; // files array of type FileObject (interface)
   private sortedFiles: FileObject[] = [];
   //private filesTodelete: string[] = [];
@@ -49,7 +51,7 @@ export class FileService {
     console.log(formData); // log for debug will be removed in the future
 
     const request$ = this.http
-      .post(host + "/api/Data/uploadfile", formData, { reportProgress: true })
+      .post(this.dataApi + 'uploadfile', formData, { reportProgress: true })
       // the server returns the file object that was entered the db
       .pipe(
         tap(console.log),
@@ -57,7 +59,7 @@ export class FileService {
       )
       .subscribe(
         (file) => {
-          console.log("Received Data:");
+          console.log('Received Data:');
           const index = this.files.findIndex((e) => e.url === file.url);
           if (index === -1) {
             this.files.push(file);
@@ -76,7 +78,7 @@ export class FileService {
   uploadAvatar(formData: FormData) {
     // console.log(formData); // log for debug will be removed in the future
     return this.http.post<{ url: string }>(
-      host + "/api/data/avatar",
+      this.dataApi + 'avatar',
       formData,
       { reportProgress: true }
     );
@@ -101,7 +103,7 @@ export class FileService {
   getFiles(albumId: string) {
     const getFileSubs = this.http
       .get<{ message: string; files: any }>(
-        host + "/api/data/getAlbumFiles/" + albumId
+        this.dataApi + 'getAlbumFiles/' + albumId
       )
       .pipe(
         tap(console.log),
@@ -116,29 +118,18 @@ export class FileService {
     });
   }
 
-  /**
-   * NEW - OFF
-   * method responsible to retrieve files list from the server
-   * by album id
-   * @param {string} albumId
-   * @returns {Subscription}
-   */
-  /* getFiles2(albumFilesId: string[]) {
-    console.warn('Sending Rquest');
-    const getFileSubs = this.http
-    .post<{ message: string; files: any }>(host + '/api/data/files/', albumFilesId)
-    .pipe(
-      tap(console.log),
-      map((serverResponse) => serverResponse.files)
-    ); // we re-edit the information to remove the  messages
-    
-    return getFileSubs.subscribe((files) => {
-        this.files = files;
-        console.log(JSON.stringify(this.files));
-        this.filesUpdatedList.next(this.files); // we return the information trough observable
-      });
+  loadThumbnail(src: string) {
+    return this.http.get(this.dataApi + 'thumbnail/' + src, {
+      responseType: 'blob',
+    });
   }
- */
+
+  loadPreview(src: string) {
+    return this.http.get(this.dataApi + 'preview/' + src, {
+      responseType: 'blob',
+    });
+  }
+
   /**
    *
    * @param fileObject This method filters out failed upload files?
@@ -165,9 +156,9 @@ export class FileService {
       LooseOwnership: looseOwnership,
     };
     this.http
-      .post(host + "/api/data/deleteFileFromAllMyAlbums/", fileToDelete)
+      .post(host + '/api/data/deleteFileFromAllMyAlbums/', fileToDelete)
       .subscribe(() => {
-        console.log("delFromAllUserDb - deleted!");
+        console.log('delFromAllUserDb - deleted!');
 
         listOfFilesToDelete.forEach((fileId) => {
           this.files.splice(
@@ -186,9 +177,9 @@ export class FileService {
       ListFileIds: files,
     };
     this.http
-      .post(host + "/api/data/share_selected/", fileToShare)
+      .post(host + '/api/data/share_selected/', fileToShare)
       .subscribe(() => {
-        console.log("files Shared!");
+        console.log('files Shared!');
       });
   }
 
@@ -199,9 +190,9 @@ export class FileService {
       ListFileIds: listOfFiles,
     };
     this.http
-      .post(host + "/api/data/setOwner_selected/", ownership)
+      .post(host + '/api/data/setOwner_selected/', ownership)
       .subscribe(() => {
-        console.log("setOwnership - done!");
+        console.log('setOwnership - done!');
       });
   }
 
@@ -220,14 +211,14 @@ export class FileService {
       new Date(
         product.exifData.dateTimeOriginal
           .toString()
-          .split(" ")[0]
-          .replace(":", "-")
+          .split(' ')[0]
+          .replace(':', '-')
       ) >= new Date(startDate) &&
         new Date(
           product.exifData.dateTimeOriginal
             .toString()
-            .split(" ")[0]
-            .replace(":", "-")
+            .split(' ')[0]
+            .replace(':', '-')
         ) <= new Date(endDate);
     });
     this.filesUpdatedList.next([...dataNew]);
