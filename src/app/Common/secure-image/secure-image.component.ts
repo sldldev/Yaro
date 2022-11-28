@@ -23,18 +23,34 @@ export class SecureImageComponent implements OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    console.warn(this.src);
+    console.warn('https://localhost:5001/api/Data/-----');
+    if(this.isBase64(this.src))
+    {
+      this.imageURL = this.src;
+    }
     //this.imageURL = this.domSanitizer.bypassSecurityTrustUrl(this.src);
     this.loadImage().subscribe(i=>
       {
+        
         this.image = i
-        this.imageURL = this.domSanitizer.bypassSecurityTrustUrl(this.image.toString())
+        this.imageURL = this.domSanitizer.bypassSecurityTrustUrl(URL.createObjectURL( this.image))
       })
 }
 
-loadImage():Observable<Blob> {
-  return this.httpClient.get(this.src, {
-  responseType: "blob"
-});
+
+  isBase64(src: string):boolean {
+    return src.startsWith('data:image/webp;base64,');
+    //throw new Error('Method not implemented.');
+  }
+
+loadImage(): Observable<Blob> {
+  return this.httpClient.get(this.src
+    ,
+     {
+  responseType: 'blob'
+}
+);
 }
   constructor(private httpClient: HttpClient, private domSanitizer: DomSanitizer, private downladService: DownloadServiceService,) {
     // this.download(this.src);
