@@ -8,6 +8,8 @@ import { log } from 'util';
 //import * as ol from 'ol';
 // --------
 import { saveAs } from 'file-saver';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FileService } from 'src/app/Services/files.service';
 // import Map from 'ol/Map';
 // import View from 'ol/View';
 // import VectorLayer from 'ol/layer/Vector';
@@ -39,8 +41,13 @@ export class ImageDisplayComponent implements OnInit {
   public downloadMessage = 'Nothing Yet';
   map: any;
   message: string;
+  private src: string;
+  imageURL:SafeUrl;
+  image: Blob;
 
   constructor(
+    private domSanitizer: DomSanitizer,
+    private filesService: FileService,
     private downladService: DownloadServiceService,
     @Inject(MAT_DIALOG_DATA)
     public data: { imageData: FileObject[]; currentImage: FileObject }
@@ -70,6 +77,7 @@ export class ImageDisplayComponent implements OnInit {
    * method responsible to init component and gps map data
    */
   ngOnInit(): void {
+    this.setCurrentView();
     this.handleGpsDisplay();
   }
 
@@ -148,9 +156,12 @@ export class ImageDisplayComponent implements OnInit {
     } else {
       this.currentIndex += n;
     }
-
+    this.setCurrentView();
     this.setCurrentExif();
     this.handleGpsDisplay();
+  }
+  setCurrentView() {
+    this.showPreview2(this.dataImages[this.currentIndex].objId);
   }
 
   private setCurrentExif() {
@@ -185,23 +196,40 @@ export class ImageDisplayComponent implements OnInit {
     this.hideGPSDisplay();
   }
 
-  /**
-   * method responsible to change the url distanation request
-   * @param url - thumbnail URL
-   */
-  showPreviw(file: FileObject) {
-    let url = '';
-    if (file.url.startsWith('data:image/webp;base64,')) {
-      url = this.makeServerUrl(file);
-    } else if (file.url.startsWith('data:image/svg+xml;')) {
-      url = file.url;
+  showPreview2(fileId:string){
+    this.src = fileId;
+    console.warn('https://localhost:5001/api/Data/Preview');
+    console.warn("----- This file Id: " + fileId);
+    
+    if (false ){ //|| this.isBase64(fileId)) {
+      this.imageURL = fileId;
     } else {
-      url = file.url.replace('.TH', '.PR');
+      this.filesService.loadPreview(fileId).subscribe((i) => {
+        this.image = i;
+        this.imageURL = this.domSanitizer.bypassSecurityTrustUrl(
+          URL.createObjectURL(this.image)
+        );
+      });
     }
-
-    url = this.setVideoUrl(file, url);
-    return url;
   }
+
+  // /**
+  //  * method responsible to change the url distanation request
+  //  * @param url - thumbnail URL
+  //  */
+  // showPreviw(file: FileObject) {
+  //   let url = '';
+  //   if (file.url.startsWith('data:image/webp;base64,')) {
+  //     url = this.makeServerUrl(file);
+  //   } else if (file.url.startsWith('data:image/svg+xml;')) {
+  //     url = file.url;
+  //   } else {
+  //     url = file.url.replace('.TH', '.PR');
+  //   }
+
+  //   url = this.setVideoUrl(file, url);
+  //   return url;
+  // }
 
   private setVideoUrl(file: FileObject, url: string) {
     console.log('setVideoUrl(file: FileObject, url: string)');

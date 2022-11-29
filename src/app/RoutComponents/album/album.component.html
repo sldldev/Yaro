@@ -118,7 +118,7 @@
                     <!-- This has to be its own component -->
                 <div class="image" >
                   <!-- <app-secure-image class="image-view" [src]="file.url" -->
-                  <app-secure-image class="image-view" [src]="file.url"
+                  <app-secure-image class="image-view" [src]="setViewUrl(file)"
                     
                                     (click)="openImageDialog(file)"></app-secure-image>
                   <mat-checkbox (change)="addRemoveFiles(file)" [ngModel]="selectAll"></mat-checkbox> 

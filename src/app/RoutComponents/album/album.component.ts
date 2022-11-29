@@ -568,6 +568,21 @@ export class AlbumComponent implements OnInit, OnDestroy {
     console.dir(this.selectedItems);
   }
 
+  /**
+   * This method selects What to use as src:
+   * Base64 or file Id
+   * @param file
+   * @returns src
+   */
+  setViewUrl(file: FileObject):string {
+    if (file.url != null) {
+      console.warn('Setting  thumbnail URL: Base64');
+      return file.url;
+    }
+    console.warn('Setting  thumbnail URL: ID');
+    return file.objId;
+  }
+
   openImageDialog(file: FileObject) {
     const dialogRef = this.dialog.open(ImageDisplayComponent, {
       // we init dialog to ask user if he sure he want to delete
