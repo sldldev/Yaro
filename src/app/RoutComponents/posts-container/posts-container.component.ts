@@ -2,10 +2,11 @@
 
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {Post} from '../../DataModules/post.model';
+import {Post} from '../../DataModels/post.model';
 import {PostService} from '../../Services/post.service';
 import {HubConnection, HubConnectionBuilder} from '@aspnet/signalr';
 import {AuthenticationService} from '../../Services/auth.service';
+import { host } from 'src/app/globals';
 
 @Component({
   selector: 'app-posts-container',
@@ -19,7 +20,7 @@ export class PostsContainerComponent implements OnInit, OnDestroy {
   comment = '';
   panelOpenState = true;
 
-  trackByIndex = index => index;
+  trackByIndex = (index: any) => index;
 
   constructor(private postService: PostService, private authService: AuthenticationService) {
   }
@@ -30,6 +31,27 @@ export class PostsContainerComponent implements OnInit, OnDestroy {
     this.posts = this.postService.getPostUpdateListener();
     this.startConnection();
   }
+
+  public startConnection = () => {
+    console.log('The User that is on signalR is');
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(`${host}/notiffication`)
+      .build();
+
+    this.hubConnection.start().then(() => {
+      console.log('Connection started with SignalR');
+    }).catch(err => console.log('Error' + err));
+
+    this.hubConnection.on('Send', (data) => {
+      console.log(data);
+      if (data === 'refreshPost') {
+        this.postService.getAllPosts();
+      }
+    });
+  };
+
+
+
 
   ngOnDestroy() {
     console.log('----------------------------------->');
@@ -43,7 +65,7 @@ export class PostsContainerComponent implements OnInit, OnDestroy {
   }
 
   public checkInLikesArray(postArray: any): String {
-    const isLiked = postArray.find(x => x.id === (localStorage.getItem('userID') || 'null'));
+    const isLiked = postArray.find(x => x.objId === (localStorage.getItem('userID') || 'null'));
     if (isLiked) {
       return 'unlike';
     } else {
@@ -59,23 +81,7 @@ export class PostsContainerComponent implements OnInit, OnDestroy {
 
   }
 
-  public startConnection = () => {
-    console.log('The User that is on signalR is');
-    this.hubConnection = new HubConnectionBuilder()
-      .withUrl('http://localhost:5000/notiffication')
-      .build();
-
-    this.hubConnection.start().then(() => {
-      console.log('Connection started with SignalR');
-    }).catch(err => console.log('Error' + err));
-
-    this.hubConnection.on('Send', (data) => {
-      console.log(data);
-      if (data === 'refreshPost') {
-        this.postService.getAllPosts();
-      }
-    });
-  };
+  
 
   public stopConnection() {
     console.log('Stopping connection');

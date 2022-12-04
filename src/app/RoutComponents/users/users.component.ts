@@ -1,8 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../Services/auth.service';
 import {Observable} from 'rxjs';
-import {Users} from '../../DataModules/users.model';
+import {Users} from '../../DataModels/users.model';
 import {FollowService} from '../../Services/follow.service';
+import {FilterModuleModule} from '../../ComponentModuleDependencies/filter-module.module';
+
+
+
+
+
 
 @Component({
   selector: 'app-users',
@@ -29,8 +35,8 @@ export class UsersComponent implements OnInit {
         data => {
           this.users2Show = data;
           // this.users2Show = data.sort(( l, r ) => {
-          //   const left = l.lastName + l.firstName;
-          //   const right = r.lastName + r.firstName;
+          //   const left = l.LastName + l.FirstName;
+          //   const right = r.LastName + r.FirstName;
           //   return left < right ? -1 : 1;
           // });
 
@@ -39,12 +45,12 @@ export class UsersComponent implements OnInit {
 
   followUser(user) {
     console.log(user);
-    this.followService.followUser(user._id);
+    this.followService.followUser(user.objId);
   }
 
   unfollow(user) {
     console.log(user);
-    this.followService.unFollowUser(user._id);
+    this.followService.unFollowUser(user.objId);
   }
 
   changeKey(key) {

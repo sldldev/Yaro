@@ -5,7 +5,7 @@ export interface NotificationModel {
   id: string;
   read: boolean;
   viewProfile: boolean;
-  senderID: string;
+  senderId: string;
   message: string;
-  createdAt: string;
+  creationDate: string;
 }

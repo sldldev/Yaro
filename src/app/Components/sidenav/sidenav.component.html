@@ -8,19 +8,49 @@
     <!-- <mat-card-subtitle>another somene</mat-card-subtitle> -->
   </mat-card>
   <br>
-  
+
+
+<!-- ============================ -->
+
+  <!-- <a 
+  *ngFor="let navElemnt of sideNavElements"
+  routerLink="{{navElemnt.routLink}}"
+  (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>navElemnt.icon</mat-icon>
+      {{navElemnt.displayName}}
+    </mat-list-item>
+  </a> -->
+<!-- ============================ -->
+
+
+<!-- 
   <a *ngIf="!authListenerSubs" routerLink="/" (click)="onClose()">
     <mat-icon>account_circle</mat-icon>
     Login
     <mat-list-item></mat-list-item>
-
   </a>
   <a *ngIf="!authListenerSubs" routerLink="/signUp" (click)="onClose()">
     <mat-list-item>
       <mat-icon>how_to_reg</mat-icon>
       SignUp
     </mat-list-item>
+  </a> -->
 
+<!--   <a *ngIf="authListenerSubs" routerLink="/groups" (click)="onClose()">
+   
+    <mat-list-item>
+      <mat-icon>announcement</mat-icon>
+      Groups
+    </mat-list-item>
+
+  </a> -->
+  
+  <a *ngIf="authListenerSubs" routerLink="/admin" (click)="onClose()">
+    <mat-list-item>
+      <mat-icon>person_pin</mat-icon>
+      Admin
+    </mat-list-item>
   </a>
   <a *ngIf="authListenerSubs" routerLink="/post" (click)="onClose()">
     <mat-list-item>
@@ -67,18 +97,18 @@
       Notifications
     </mat-list-item>
   </a>
-  <a *ngIf="authListenerSubs" routerLink="/albums" (click)="onClose()">
+  <a *ngIf="authListenerSubs" routerLink="/albums" (click)="onClose('albumButtons')">
     <mat-list-item>
       <mat-icon>art_track</mat-icon>
       My Albums
     </mat-list-item>
   </a>
-  <a *ngIf="authListenerSubs" routerLink="/create" (click)="onClose()">
+  <!-- <a *ngIf="authListenerSubs" [routerLink]="['/album','create']" (click)="onClose()">
     <mat-list-item>
       <mat-icon>add_photo_alternate</mat-icon>
       Add Album
     </mat-list-item>
-  </a>
+  </a> -->
   <a *ngIf="authListenerSubs" routerLink="/settings" (click)="onClose()">
     <mat-list-item>
       <mat-icon>settings_applications</mat-icon>

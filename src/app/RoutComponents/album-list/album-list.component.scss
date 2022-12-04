@@ -8,17 +8,6 @@
 
 
 
-.search-container {
-
-  .sort {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--primary-text-color);
-  }
-}
-
 
 // albums list
 .viewport {
@@ -36,18 +25,19 @@
 mat-card {
   position: relative;
   display: inline-block;
-  min-width: 230px;
-
+  width: 230px;
   margin: 1rem;
   background-color: var(--box-bg-color);
   background-color: var(--box-bg-color-alpha);
 
 
-  background-image: url(https://picsum.photos/300/200);
+/*   background-image: url(https://picsum.photos/300/200); */
   background-size: cover;
   background-position: center;
   background-blend-mode: multiply;
+  
   box-shadow: 0 0 10px var(--box-bg-color-alpha) !important;
+  
 
   cursor: pointer;
 
@@ -84,6 +74,10 @@ mat-card {
         font-size: 1.2em;
         font-weight: 700;
         color: var(--box-primary-text-color);
+        text-shadow: 0 5px 5px  #000000;
+        background-color: rgb(124, 120, 120);
+        
+        // animation: glow 1s ease-in-out infinite alternate;
       }
 
       mat-card-subtitle {
@@ -93,6 +87,8 @@ mat-card {
         font-weight: 600;
         margin-top: -4px;
         color: var(--box-primary-text-color);
+        text-shadow: 0 0 8px #000000;
+        background-color: rgb(124, 120, 120);
       }
     }
   }

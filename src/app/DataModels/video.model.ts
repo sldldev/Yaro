@@ -14,6 +14,6 @@ export interface SignalInfo {
 }
 
 export interface ChatMessage {
-  own: boolean;
+  ownMessage: boolean;
   message: string;
 }

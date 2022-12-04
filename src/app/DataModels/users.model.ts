@@ -1,8 +1,9 @@
 export interface Users {
-  _id: string;
+  id: string;
   avatar: string;
   firstName: string;
   lastName: string;
+  userName: string;
   isFollowed: boolean;
   isFollowing: boolean;
 }

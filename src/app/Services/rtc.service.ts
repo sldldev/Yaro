@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Instance } from 'simple-peer';
-import {PeerData, UserInfo} from '../DataModules/video.model';
+import {PeerData, UserInfo} from '../DataModels/video.model';
 
 
 declare var SimplePeer: any;
@@ -27,6 +27,7 @@ export class RtcService {
   public onData$ = this.onData.asObservable();
 
   public currentPeer: Instance;
+  public otherPeer: Instance;
 
   constructor() {
     this.users = new BehaviorSubject([]);
@@ -52,7 +53,7 @@ export class RtcService {
 
     peer.on('stream', data => {
       console.log('on stream', data);
-      this.onStream.next({ id: userId, data });
+      this.onStream.next({ id: userId, data: data });
     });
 
     peer.on('connect', () => {
@@ -60,7 +61,7 @@ export class RtcService {
     });
 
     peer.on('data', data => {
-      this.onData.next({ id: userId, data });
+      this.onData.next({ id: userId, data: data });
     });
 
     return peer;

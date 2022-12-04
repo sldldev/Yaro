@@ -12,9 +12,9 @@
            [formControl]="myControl"
            [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option *ngFor="let option of options" [value]="option.firstName+' '+option.lastName"
+      <mat-option *ngFor="let option of options" [value]="option.FirstName+' '+option.LastName"
                   (onSelectionChange)="onShopSelectionChanged(option)">
-        {{option.firstName + " " + option.lastName}}
+        {{option.FirstName + " " + option.LastName}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

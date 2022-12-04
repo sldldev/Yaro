@@ -1,11 +1,13 @@
 /**
  * Imports of used components and modules
  */
-import { Component,OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '../../../../node_modules/@angular/forms/forms';
 import { AuthenticationService } from '../../Services/auth.service';
 import { Subscription } from '../../../../node_modules/rxjs/index';
 import { UIService } from '../../Services/ui.service';
+import { AlbumService } from 'src/app/Services/album.service';
+import { AlbumModel } from 'src/app/DataModels/album.model';
 
 @Component ({
   selector: 'app-sign-up',
@@ -13,7 +15,7 @@ import { UIService } from '../../Services/ui.service';
   styleUrls: ['./sign-up.component.scss']
 })
 
-export class SignUpComponent implements OnInit,OnDestroy {
+export class SignUpComponent implements OnInit, OnDestroy {
   isLoading = false;
   private loadingSub: Subscription;
   private authStatusSub: Subscription; // authStatusSub init with Subscription property
@@ -22,7 +24,10 @@ export class SignUpComponent implements OnInit,OnDestroy {
    * constructor that implements AuthenticationService
    * @param {AuthenticationService} authService
    */
-  constructor(public authService: AuthenticationService,private uiService: UIService) {
+  constructor(
+    // was public
+    private authService: AuthenticationService,
+    private uiService: UIService) {
   }
 
   /**
@@ -48,7 +53,7 @@ export class SignUpComponent implements OnInit,OnDestroy {
     if (form.invalid) { // if form is invalid will not continue
       return;
     } else { // in case form filled correctly this method will call the authService create user method
-      this.authService.createUser (form.value.email,form.value.password,form.value.firstName,form.value.lastName);
+      this.authService.createUser (form.value.Email, form.value.Password, form.value.FirstName, form.value.LastName);
     }
     form.resetForm (); // clear the form from input data
   }

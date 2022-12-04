@@ -4,8 +4,8 @@ import {CommonModule, DatePipe} from '@angular/common';
 
 @NgModule({
   declarations: [],
-  imports: [CdkVirtualScrollViewport, ScrollingModule, CommonModule, ],
-  exports: [CdkVirtualScrollViewport, ScrollingModule, ]
+  imports: [ ScrollingModule, CommonModule, ], // CdkVirtualScrollViewport
+  exports: [ScrollingModule, ] //CdkVirtualScrollViewport
 })
 
 export class CdkVirtualScrollModule {

@@ -1,0 +1,25 @@
+<p>admin-restore works!</p>
+<div *ngIf="restoreResponce$ |async as restoreObject">
+
+<!-- <ng-template #nodata>
+  <h3>No data</h3>
+</ng-template> -->
+<div>
+  <p>
+    Last Restore:{{restoreObject.restoreName}}
+  </p>
+
+  <button (click)="restore(item)">Restore</button>
+  <mat-selection-list  #restores  [multiple]="false">
+      <mat-list-option *ngFor="let item of restoreObject.restoreList" (click)="click(item)">
+        {{item}}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+</div>
+
+  
+  <!-- <p *ngIf="restoreResponce$ |async">
+    Options selected: {{restores.selectedOptions.selected}}
+  </p> -->

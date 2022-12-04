@@ -4,12 +4,12 @@
     <div class="col-5">
       <div class="row">
         <div class="col">
-          <input [(ngModel)]="currentUser" required placeholder="UserName" type="text">
+          <input [(ngModel)]="userName" required disabled="true"  type="text">
         </div>
         <div class="col">
           <div class="btn-group" role="group" aria-label="button group">
-            <button [disabled]="!currentUser" (click)="saveUsername()" type="button"
-                    class="btn btn-sm btn-primary">Save</button>
+            <button [disabled]="isOnline" (click)="getOnline()" type="button"
+                    class="btn btn-sm btn-primary">Get Online</button>
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@
           <div class="chat-box">
 
             <ng-container *ngFor="let message of messages">
-              <div [ngClass]="{'my-message': message.own, 'other-message': !message.own}">
+              <div [ngClass]="{'my-message': message.ownMessage, 'other-message': !message.ownMessage}">
                 {{message.message}}
               </div>
             </ng-container>
@@ -52,9 +52,9 @@
   <div class="row mt-4">
     <div class="col">
       <video #videoPlayerUser width="320" height="240" controls></video>
-<!--
+
       <video #videoPlayer width="320" height="240" controls></video>
--->
+
     </div>
   </div>
 </div>

@@ -12,7 +12,7 @@ import {CommonModule} from '@angular/common';
     DeleteAlbumDialogComponent
   ],
   imports: [CommonModule, MaterialModule],
-  exports: [],
+  exports: [DeleteAlbumDialogComponent],
 })
 
 export class MessagesModule {

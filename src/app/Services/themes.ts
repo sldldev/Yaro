@@ -5,7 +5,7 @@ export const lightTheme = {
   'secondary-color': '#4f61ac',
   'third-color': '#a9b2d7',
   'fourth-color': '#fff',
-  'box-shadow-color':'#0E0E0E',
+  'box-shadow-color': '#0E0E0E',
 
 
 
@@ -23,6 +23,7 @@ export const lightTheme = {
 
   'box-bg-color': '#292564',
   'box-bg-color-alpha': '#fff',
+  'box-bg-color-blue': '#fff',
   'box-primary-text-color': '#e0e0fd',
   'box-secondary-text-color': '#a9b2d7',
   'spinner-color': '#1d1953',
@@ -50,7 +51,7 @@ export const darkTheme = {
   'secondary-color': '#4f61ac',
   'third-color': '#d7daec',
   'fourth-color': '#fff',
-  'box-shadow-color':'#333',
+  'box-shadow-color': '#333',
 
   'primary-bg-color': '#605D65',
   'secondary-bg-color': '#333',

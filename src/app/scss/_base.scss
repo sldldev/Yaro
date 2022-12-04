@@ -1,5 +1,6 @@
+@import "~bootstrap/dist/css/bootstrap.css";
 @import "macros";
-@import "colors";
+@import "_colors";
 
 //////////////////////////////////////////////////////////////////////////////////
 // screens
@@ -44,8 +45,9 @@ sans-serif;
 //////////////////////////////////////////////////////////////////////////////////
 
 
-$main-header-height: 64px;
-$main-header-height-small: 56px;
+$main-header-height: 64px; /* 16rem; *//*  64px; */
+$main-header-height-small:56px; /* 14rem; */ /* 56px; */
+/* $main-header-heigth-option: 51.25rem; */
 
 $main-wrapper-width: 80%;
 $main-wrapper-max-width: 1000px;

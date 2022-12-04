@@ -1,6 +1,6 @@
 import {Component, Inject} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material';
-
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {  MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-delete-album-dialog',
   templateUrl: './delete-album-dialog.component.html',
@@ -12,8 +12,6 @@ export class DeleteAlbumDialogComponent {
    * delete album conformation dialog
    * @param passedData the album name that is going to be deleted
    */
-  constructor(@Inject(MAT_DIALOG_DATA) private passedData: any) {
+  constructor(@Inject(MAT_DIALOG_DATA) public passedData: any) {
   }
-
-
 }

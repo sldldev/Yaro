@@ -8,21 +8,39 @@ import {FormsModule} from '@angular/forms';
 import {AppRoutingModule} from '../app-routing.module';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {SecureImageComponent} from '../Common/secure-image/secure-image.component';
-import {AlbumPipe} from '../pipes/album-pipe';
-import {MatProgressBarModule} from '@angular/material';
+// import { ImageCarouselComponent } from '../RoutComponents/image-carousel/image-carousel.component';
 
+import {AlbumPipe} from '../pipes/album-pipe';
+import {MatProgressBarModule } from '@angular/material/progress-bar';
+import {FilterModuleModule} from '../ComponentModuleDependencies/filter-module.module';
+import {OptionsButtonsModule } from './options-buttons.module';
+//import { SaveItemComponent } from '../RoutComponents/save-item/save-item.component';
 
 @NgModule({
   declarations: [
     AddAlbumComponent,
     AlbumListComponent,
     AlbumComponent,
-    AlbumComponent,
     SecureImageComponent,
     AlbumPipe,
+   // SaveItemComponent,
+    //ImageCarouselComponent,
+
+
   ],
-    imports: [CommonModule, MaterialModule, FormsModule, AppRoutingModule, ScrollingModule, MatProgressBarModule],
-  exports: [SecureImageComponent,]
+    imports: [
+      CommonModule,
+      MaterialModule,
+      FormsModule,
+      AppRoutingModule,
+      ScrollingModule,
+      MatProgressBarModule,
+      FilterModuleModule,
+      OptionsButtonsModule,
+      //GroupModule,
+    ],
+  exports: [SecureImageComponent, OptionsButtonsModule,  ] ,//SecureImageComponent, ImageCarouselComponent,],
+ // bootstrap: [ImageCarouselComponent]
 })
 export class AlbumComponentsModule {
 }

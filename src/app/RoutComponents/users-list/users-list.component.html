@@ -1,0 +1,47 @@
+<p>users-list works!</p>
+
+<div  *ngIf="listOfUsers ; else noUsers">
+
+<!-- <mat-selection-list>
+    <mat-list-option 
+    *ngFor="let user of listOfUsers"
+    (click)="onUserSelect(user)"
+    >
+      <img matListAvatar src="{{user.Avatar}}" alt="img">
+      < !-- <h3 matLine> {{user.FirstName}} {{user.LastName}}</h3> -- >
+      <p matLine>
+        <span> {{user.objId}} </span>
+        <span class="demo-2"> {{user.FirstName}} {{user.LastName}}</span>
+      </p>
+      < !-- {{user.objId}} {{user.FirstName}} {{user.LastName}} -- >
+    </mat-list-option>
+  </mat-selection-list> 
+-->
+
+
+  <mat-list>
+    <mat-list-item
+    *ngFor="let user of listOfUsers"
+    (click)="onUserSelect(user)"
+    >
+      <img matListAvatar src="{{user.Avatar}}" alt="img">
+      <!-- <h3 matLine> {{message.from}} </h3> -->
+      <p matLine>
+        <span> {{user.objId}} </span>
+        <span class="demo-2"> {{user.FirstName}} {{user.LastName}}</span>
+      </p>
+    </mat-list-item>
+  </mat-list>
+  
+</div>
+
+<ng-template #noUsers>
+  <p class="no-users">No users are found</p>
+</ng-template>
+<!-- 
+  <mat-list>
+    <mat-list-item *ngFor="let user of listOfUsers">
+     
+    </mat-list-item>
+  </mat-list>
+   -->

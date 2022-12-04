@@ -5,25 +5,33 @@
   <div class="chatWrapper">
     <app-message-recipient class="people"></app-message-recipient>
 
-    <div #scroller  class="chat">
-      <div class="chatForm">
+    <div  class="chat">
+      <div class="chatForm" *ngIf="receiverId!=='main';else selectUser">
         <mat-form-field>
-          <textarea matInput placeholder="Enter your message here" [(ngModel)]="message" cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5"></textarea>
+          <textarea matInput 
+          placeholder="Chat with {{receiverUser.FirstName}} {{receiverUser.LastName}}"
+          [(ngModel)]="message" 
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize" 
+          cdkAutosizeMinRows="1" 
+          cdkAutosizeMaxRows="5">
+          </textarea>
 
           <i class="material-icons" matTooltip="send" matTooltipPosition="left"
              (click)="sendMessage()">
             keyboard_arrow_right
           </i>
         </mat-form-field>
-
+        
 
         <!-- <button  class="button" (click)="sendMessage()">Send</button> -->
 
-
       </div>
+      <ng-template  #selectUser>
+        <h3 class="selectuserNote">Slect a User to have the conversation with.</h3> 
+      </ng-template>
 
-      <div class="feedWrapper">
+      <div class="feedWrapper" #scroller >
         <app-message-feed></app-message-feed>
       </div>
 

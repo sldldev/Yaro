@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {map, tap} from 'rxjs/operators';
-import {NotificationModel} from '../DataModules/notification.model';
+import {NotificationModel} from '../DataModels/notification.model';
 import {host} from '../globals';
 
 @Injectable({
@@ -36,7 +36,7 @@ export class NotificationService {
    */
   getUnreadNotificationsSize() {
     const size = this.notifications.filter(x => x.read === false).length;
-    console.log('The Size of unread is :' + size);
+    // console.log('The Size of unread is :' + size);
     this.notificationSizeUpdate.next(size);
   }
 
@@ -45,10 +45,11 @@ export class NotificationService {
    */
   getUserNotification() {
     return this.http.get(host + '/api/notification/notifications/')
-      .pipe(tap(console.log), map(serverResponse => serverResponse)) // we re-edit the information to remove the  messages
-      .subscribe(files => {
+      .pipe(//tap(console.log),
+       map(serverResponse => serverResponse)) // we re-edit the information to remove the  messages
+      .subscribe((files :NotificationModel[]) => {
           this.notifications = files;
-          console.log(JSON.stringify(this.notifications));
+          // console.log(JSON.stringify(this.notifications));
           this.notificationUpdated.next(this.notifications);
           this.getUnreadNotificationsSize();// we return the information trough observable
         }
@@ -57,13 +58,13 @@ export class NotificationService {
 
   /**
    * method responsible to delete spesific nottification
-   * @param notificationID
+   * @param nottificationId
    */
-  public deleteNotification(notificationID: string) {
-    this.http.delete(host + '/api/notification/delete_notification/' + notificationID) // pass album id as parameter
+  public deleteNotification(nottificationId: string) {
+    this.http.delete(host + '/api/notification/delete_notification/' + nottificationId) // pass album id as parameter
       .subscribe(() => {
-        console.log('deleted!');
-        const updateNotifications = this.notifications.filter(not => not.id !== notificationID); // we remove the album from our list
+        // console.log('deleted!');
+        const updateNotifications = this.notifications.filter(not => not.id !== nottificationId); // we remove the album from our list
         this.notifications = updateNotifications; // init the album list with the filtered list
         this.notificationUpdated.next([...this.notifications]); // and we inform the subject and return new copy of albums array
       });
@@ -78,11 +79,12 @@ export class NotificationService {
     this.notifications[objIndex].read = true;
     this.notificationUpdated.next([...this.notifications]);
     this.getUnreadNotificationsSize();
-    return this.http.post(host + '/api/notification/mark_read/', {notificationID: nottificationId})
-      .pipe(tap(console.log), map((serverResponse => serverResponse)))
+    return this.http.post(host + '/api/notification/mark_read/', {notificationobjId: nottificationId})
+      .pipe(//tap(console.log), 
+      map((serverResponse => serverResponse)))
       .subscribe((data) => {
-          console.log('Received Data:' + data);
-          console.dir(data);
+          // console.log('Received Data:' + data);
+          // console.dir(data);
           /*          this.posts.unshift(data);
                     this.postUpdated.next([...this.posts]);
                     console.dir(this.posts);*/
@@ -100,10 +102,11 @@ export class NotificationService {
     this.notificationUpdated.next([...this.notifications]);
     this.getUnreadNotificationsSize();
     return this.http.post(host + '/api/notification/mark_all_read/', null)
-      .pipe(tap(console.log), map((serverResponse => serverResponse)))
+      .pipe(//tap(console.log),
+       map((serverResponse => serverResponse)))
       .subscribe((data) => {
-          console.log('Received Data:' + data);
-          console.dir(data);
+          // console.log('Received Data:' + data);
+          // console.dir(data);
           /*          this.posts.unshift(data);
                     this.postUpdated.next([...this.posts]);
                     console.dir(this.posts);*/

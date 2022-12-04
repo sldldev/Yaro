@@ -1,10 +1,10 @@
 export class ChatMessage {
-  Id: string;
+  id: string;
   senderId: string;
   receiverId: string;
-  senderName: string;
+  SenderName: string;
   receiverName: string;
   body: string;
   isRead: boolean;
-  createdAt: string;
+  dateCreated: string;
 }

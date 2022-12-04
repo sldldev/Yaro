@@ -1,0 +1,30 @@
+@import "../../scss/form";
+
+
+.main-wrap{
+    display: grid;
+    grid-template-columns:repeat(12,1fr);
+    gap: 24px;
+    // grid-column: span 8;
+
+    .my-group-users{
+        grid-column: span 4;
+    }
+    .control-wrap{
+        grid-column:span 4;
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        flex-direction: column;
+        button{
+            max-width: 170px;
+            min-width: 150px;
+
+        }
+    }
+    .users-to-add{
+        grid-column: span 4;
+        text-align: end;
+    }
+
+}

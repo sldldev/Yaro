@@ -2,5 +2,6 @@
 
 
 <div class="image-frame">
-  <img class="thumbnail" [attr.src]="dataUrl|async">
+  <a> this is {{imageURL| async}}</a>
+  <img class="thumbnail" [attr.src] = "imageURL |async">
 </div>
